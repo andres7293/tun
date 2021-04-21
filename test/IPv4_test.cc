@@ -41,14 +41,18 @@ TEST(IPv4_Header, validate_checksum) {
     delete[] zeroBuf;
 }
 
-TEST(util, netToHostShort) {
+TEST(util, swap_endian_u16) {
     uint16_t big_endian = 0xAABB;
-    ASSERT_EQ(0xBBAA, netToHostShort(big_endian));
+    uint16_t litte_endian = 0xBBAA;
+    ASSERT_EQ(litte_endian, swap_endian_u16(big_endian));
+    ASSERT_EQ(big_endian, swap_endian_u16(litte_endian));
 }
 
-TEST(util, netToHostLong) {
+TEST(util, swap_endian_u32) {
     uint32_t big_endian = 0xAABBCCDD;
-    ASSERT_EQ(0xDDCCBBAA, netToHostLong(big_endian));
+    uint32_t litte_endian = 0xDDCCBBAA;
+    ASSERT_EQ(litte_endian, swap_endian_u32(big_endian));
+    ASSERT_EQ(big_endian, swap_endian_u32(litte_endian));
 }
 
 int main(int argc, char *argv[]) {
