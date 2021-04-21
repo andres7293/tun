@@ -30,6 +30,7 @@ class IP_Header {
         void parse(uint8_t *net_frame);
         uint8_t getVersion();
         uint8_t getHeaderLen();
+        uint8_t getHeaderLenInBytes();
         uint8_t getFlags();
         uint8_t getFragmentOffset();
         IPv4_Protocol getProtocol();

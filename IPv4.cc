@@ -24,6 +24,10 @@ uint8_t IP_Header::getHeaderLen() {
     return (this->header.version_headerlen & 0x0f);
 }
 
+uint8_t IP_Header::getHeaderLenInBytes() {
+    return this->getHeaderLen() * 4;
+}
+
 uint8_t IP_Header::getFlags() {
     return ((this->header.flags_fragoffset & 0xE000) >> 13);
 }

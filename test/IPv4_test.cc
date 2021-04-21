@@ -27,6 +27,13 @@ TEST(IP_Header, getProtocol) {
     ASSERT_EQ(IPv4_Protocol::ICMP, ip_header.getProtocol());
 }
 
+TEST(IP_Header, getHeaderLenInBytes) {
+    IP_Header ip_header;
+    ip_header.parse((uint8_t *) ip_header_raw);
+
+    ASSERT_EQ(20, ip_header.getHeaderLenInBytes());
+}
+
 int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
