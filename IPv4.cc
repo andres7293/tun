@@ -1,7 +1,7 @@
 #include "IPv4.H"
 #include <cstdint>
 
-IPv4::IPv4(const uint8_t *net_frame) {
+void IP_Header::parse(uint8_t *net_frame) {
     IPv4_Header_t *raw = (IPv4_Header_t *) net_frame;
 
     this->ip_header.version_headerlen = raw->version_headerlen;
@@ -14,6 +14,22 @@ IPv4::IPv4(const uint8_t *net_frame) {
     this->ip_header.header_checksum   = netToHostShort(raw->header_checksum);
     this->ip_header.src_addr          = netToHostLong(raw->src_addr);
     this->ip_header.dst_addr          = netToHostLong(raw->dst_addr);
+}
+
+uint8_t IP_Header::getVersion() {
+    return ((this->ip_header.version_headerlen & 0xf0) >> 4);
+}
+
+uint8_t IP_Header::getHeaderLen() {
+    return (this->ip_header.version_headerlen & 0x0f);
+}
+
+uint8_t IP_Header::getFlags() {
+    return ((this->ip_header.flags_fragoffset & 0b1110000000000000) >> 13);
+}
+
+uint8_t IP_Header::getFragmentOffset() {
+    return (this->ip_header.flags_fragoffset & 0b0001111111111111);
 }
 
 uint16_t netToHostShort(uint16_t val) {
@@ -42,19 +58,17 @@ uint32_t netToHostLong(uint32_t val) {
 }
 
 ostream& operator << (ostream& os, IPv4_Header_t &h) {
-    os << "IPv4_Header_t{"
-        << "version=0x"          << hex << (int) ((h.version_headerlen & 0xf0) >> 4)               << dec
-        << ",headerLen=0x"       << hex << (int)(h.version_headerlen & 0x0f)                       << dec
-        << ",tos=0x"             << hex << (int) h.total_len                                       << dec
-        << ",id=0x"              << hex << (int) h.id                                              << dec
-        << ",flags=0x"           << hex << (int) ((h.flags_fragoffset & 0b1110000000000000) >> 13) << dec
-        << ",fragment_offset=0x" << hex << (int) (h.flags_fragoffset & 0b0001111111111111)         << dec
-        << ",ttl=0x"             << hex << (int) h.ttl                                             << dec
-        << ",protocol=0x"        << hex << (int) h.protocol                                        << dec
-        << ",header_checksum=0x" << hex << (int) h.header_checksum                                 << dec
-        << ",src_addr=0x"        << hex << (int) h.src_addr                                        << dec
-        << ",dst_addr=0x"        << hex << (int) h.dst_addr                                        << dec
-        << "}"
-        ;
+    os   << "IPv4_Header_t{"
+         << "version_headerlen=0x" << hex << (int) h.version_headerlen << dec
+         << ",tos=0x"              << hex << (int) h.tos               << dec
+         << ",total_len=0x"        << hex << (int) h.total_len         << dec
+         << ",id=0x"               << hex << (int) h.id                << dec
+         << ",flags_fragoffset=0x" << hex << (int) h.flags_fragoffset  << dec
+         << ",ttl=0x"              << hex << (int) h.ttl               << dec
+         << ",protocol=0x"         << hex << (int) h.protocol          << dec
+         << ",header_checksum=0x"  << hex << (int) h.header_checksum   << dec
+         << ",src_addr=0x"         << hex << (int) h.src_addr          << dec
+         << ",dst_addr=0x"         << hex << (int) h.dst_addr          << dec
+         << "}";
     return os;
 }

@@ -1,6 +1,7 @@
 #ifndef __IPV4__H__
 #define __IPV4__H__
 
+#include <bits/stdint-uintn.h>
 #include <cstdint>
 #include <iostream>
 using namespace std;
@@ -17,17 +18,22 @@ struct IPv4_Header_t {
         uint16_t header_checksum;
         uint32_t src_addr;
         uint32_t dst_addr;
-        
-        static const int VERSION = 4;
 }__attribute__((packed));
 
-class IPv4 {
+enum class IPv4_Protocol {
+    ICMP = 0x01,
+    UNKNOW = 0xff
+};
+
+class IP_Header {
     public:
-        IPv4(const uint8_t *net_frame);
-    private:
+        void parse(uint8_t *net_frame);
+        uint8_t getVersion();
+        uint8_t getHeaderLen();
+        uint8_t getFlags();
+        uint8_t getFragmentOffset();
+
         IPv4_Header_t ip_header;
-        uint8_t *payload;
-        unsigned int payload_size;
 };
 
 uint16_t netToHostShort(uint16_t val);
