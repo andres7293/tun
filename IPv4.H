@@ -26,6 +26,7 @@ class IP_Header {
         static uint8_t getHeaderLenInBytes(IPv4_Header_t *h);
         static uint8_t getFlags(IPv4_Header_t *h);
         static uint8_t getFragmentOffset(IPv4_Header_t *h);
+        static bool    validate_checksum(uint8_t *net_frame);
 };
 
 uint16_t netToHostShort(uint16_t val);

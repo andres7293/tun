@@ -1,4 +1,5 @@
 #include "IPv4.H"
+#include <bits/stdint-uintn.h>
 #include <cstdint>
 
 uint8_t IP_Header::getVersion(IPv4_Header_t *h) {
@@ -19,6 +20,24 @@ uint8_t IP_Header::getFlags(IPv4_Header_t *h) {
 
 uint8_t IP_Header::getFragmentOffset(IPv4_Header_t *h) {
     return (h->flags_fragoffset & 0x1FFF);
+}
+
+bool IP_Header::validate_checksum(uint8_t *net_frame) {
+    IPv4_Header_t *h = (IPv4_Header_t *) net_frame;
+    uint8_t num_blocks_of_16bits = IP_Header::getHeaderLenInBytes(h) / 2;
+    uint32_t u32_sum = 0;
+    uint16_t *p = (uint16_t *) net_frame;
+    for (uint8_t i = 0; i < num_blocks_of_16bits; i++)
+        u32_sum += p[i];
+    uint16_t carry = ((u32_sum & 0x000f0000) >> 16);
+    uint16_t u16_sum = (u32_sum & 0x0000ffff);
+    uint16_t result = ~(u16_sum + carry);
+    if (result != 0) {
+        return false;
+    }
+    else {
+        return true;
+    }
 }
 
 uint16_t netToHostShort(uint16_t val) {
