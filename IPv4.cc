@@ -1,6 +1,4 @@
 #include "IPv4.H"
-#include <bits/stdint-uintn.h>
-#include <cstdint>
 
 uint8_t IPv4_Header::getVersion(IPv4_Header_t *h) {
     return ((h->version_headerlen & 0xf0) >> 4);

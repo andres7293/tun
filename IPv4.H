@@ -1,8 +1,6 @@
 #ifndef __IPV4__H__
 #define __IPV4__H__
 
-#include <bits/stdint-uintn.h>
-#include <cstdint>
 #include <iostream>
 
 #include "Utils.H"
