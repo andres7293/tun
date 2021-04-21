@@ -57,9 +57,6 @@ int main(void) {
             if (FD_ISSET(fd, &readfds)) {
                 //ssize_t bytesRead = read(fd, buf, sizeof(buf));
                 read(fd, buf, sizeof(buf));
-                IP_Header ip_header;
-                ip_header.parse(buf);
-                cout << ip_header.header << endl;
             }
             else if (FD_ISSET(fd, &writefds)) {
                 cout << "write available" << endl;

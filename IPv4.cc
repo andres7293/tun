@@ -1,39 +1,24 @@
 #include "IPv4.H"
 #include <cstdint>
 
-void IP_Header::parse(uint8_t *net_frame) {
-    IPv4_Header_t *raw = (IPv4_Header_t *) net_frame;
-
-    this->header.version_headerlen = raw->version_headerlen;
-    this->header.tos               = raw->tos;
-    this->header.total_len         = netToHostShort(raw->total_len);
-    this->header.id                = netToHostShort(raw->id);
-    this->header.flags_fragoffset  = netToHostShort(raw->flags_fragoffset);
-    this->header.ttl               = raw->ttl;
-    this->header.protocol          = raw->protocol;
-    this->header.header_checksum   = netToHostShort(raw->header_checksum);
-    this->header.src_addr          = netToHostLong(raw->src_addr);
-    this->header.dst_addr          = netToHostLong(raw->dst_addr);
+uint8_t IP_Header::getVersion(IPv4_Header_t *h) {
+    return ((h->version_headerlen & 0xf0) >> 4);
 }
 
-uint8_t IP_Header::getVersion() {
-    return ((this->header.version_headerlen & 0xf0) >> 4);
+uint8_t IP_Header::getHeaderLen(IPv4_Header_t *h) {
+    return (h->version_headerlen & 0x0f);
 }
 
-uint8_t IP_Header::getHeaderLen() {
-    return (this->header.version_headerlen & 0x0f);
+uint8_t IP_Header::getHeaderLenInBytes(IPv4_Header_t *h) {
+    return getHeaderLen(h) * 4;
 }
 
-uint8_t IP_Header::getHeaderLenInBytes() {
-    return this->getHeaderLen() * 4;
+uint8_t IP_Header::getFlags(IPv4_Header_t *h) {
+    return ((h->flags_fragoffset & 0xE000) >> 13);
 }
 
-uint8_t IP_Header::getFlags() {
-    return ((this->header.flags_fragoffset & 0xE000) >> 13);
-}
-
-uint8_t IP_Header::getFragmentOffset() {
-    return (this->header.flags_fragoffset & 0x1FFF);
+uint8_t IP_Header::getFragmentOffset(IPv4_Header_t *h) {
+    return (h->flags_fragoffset & 0x1FFF);
 }
 
 uint16_t netToHostShort(uint16_t val) {
