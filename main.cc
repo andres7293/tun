@@ -111,17 +111,18 @@ int tun_alloc(char *dev)
 }
 
 void print_header_host(IPv4_Header_t *h) {
-    cout  << "IPv4_Header{"
-          << "version=0x"          << hex   << (int) IPv4_Header::getVersion(h)                << dec
-          << ",headerLen=0x"       << hex   << (int) IPv4_Header::getHeaderLen(h)              << dec
-          << ",tos=0x"             << hex   << (int) h->tos                                    << dec
-          << ",total_len=0x"       << hex   << (int) utils::netToHostShort(h->total_len)       << dec
-          << ",id=0x"              << hex   << (int) utils::netToHostShort(h->id)              << dec
-          << ",flags=0x"           << hex   << (int) IPv4_Header::getFlags(h)                  << dec
-          << ",fragmenOffset=0x"   << hex   << (int) IPv4_Header::getFragmentOffset(h)         << dec
-          << ",ttl=0x"             << hex   << (int) h->ttl                                    << dec
-          << ",header_checksum=0x" << hex   << (int) utils::netToHostShort(h->header_checksum) << dec
-          << ",src_addr=0x"        << hex   << (int) utils::netToHostLong(h->src_addr)         << dec
-          << ",dst_addr=0x"        << hex   << (int) utils::netToHostLong(h->dst_addr)         << dec
-          << "}"                   << endl;
+    cout   << "IPv4_Header{"
+           << "version=0x"          << hex   << (int) IPv4_Header::getVersion(h)                << dec
+           << ",headerLen=0x"       << hex   << (int) IPv4_Header::getHeaderLen(h)              << dec
+           << ",tos=0x"             << hex   << (int) h->tos                                    << dec
+           << ",total_len=0x"       << hex   << (int) utils::netToHostShort(h->total_len)       << dec
+           << ",id=0x"              << hex   << (int) utils::netToHostShort(h->id)              << dec
+           << ",flags=0x"           << hex   << (int) IPv4_Header::getFlags(h)                  << dec
+           << ",fragmenOffset=0x"   << hex   << (int) IPv4_Header::getFragmentOffset(h)         << dec
+           << ",ttl=0x"             << hex   << (int) h->ttl                                    << dec
+           << ",protocol=0x"        << hex   << (int) h->protocol                               << dec
+           << ",header_checksum=0x" << hex   << (int) utils::netToHostShort(h->header_checksum) << dec
+           << ",src_addr=0x"        << hex   << (int) utils::netToHostLong(h->src_addr)         << dec
+           << ",dst_addr=0x"        << hex   << (int) utils::netToHostLong(h->dst_addr)         << dec
+           << "}"                   << endl;
 }
