@@ -4,32 +4,32 @@
 void IP_Header::parse(uint8_t *net_frame) {
     IPv4_Header_t *raw = (IPv4_Header_t *) net_frame;
 
-    this->ip_header.version_headerlen = raw->version_headerlen;
-    this->ip_header.tos               = raw->tos;
-    this->ip_header.total_len         = netToHostShort(raw->total_len);
-    this->ip_header.id                = netToHostShort(raw->id);
-    this->ip_header.flags_fragoffset  = netToHostShort(raw->flags_fragoffset);
-    this->ip_header.ttl               = raw->ttl;
-    this->ip_header.protocol          = raw->protocol;
-    this->ip_header.header_checksum   = netToHostShort(raw->header_checksum);
-    this->ip_header.src_addr          = netToHostLong(raw->src_addr);
-    this->ip_header.dst_addr          = netToHostLong(raw->dst_addr);
+    this->header.version_headerlen = raw->version_headerlen;
+    this->header.tos               = raw->tos;
+    this->header.total_len         = netToHostShort(raw->total_len);
+    this->header.id                = netToHostShort(raw->id);
+    this->header.flags_fragoffset  = netToHostShort(raw->flags_fragoffset);
+    this->header.ttl               = raw->ttl;
+    this->header.protocol          = raw->protocol;
+    this->header.header_checksum   = netToHostShort(raw->header_checksum);
+    this->header.src_addr          = netToHostLong(raw->src_addr);
+    this->header.dst_addr          = netToHostLong(raw->dst_addr);
 }
 
 uint8_t IP_Header::getVersion() {
-    return ((this->ip_header.version_headerlen & 0xf0) >> 4);
+    return ((this->header.version_headerlen & 0xf0) >> 4);
 }
 
 uint8_t IP_Header::getHeaderLen() {
-    return (this->ip_header.version_headerlen & 0x0f);
+    return (this->header.version_headerlen & 0x0f);
 }
 
 uint8_t IP_Header::getFlags() {
-    return ((this->ip_header.flags_fragoffset & 0b1110000000000000) >> 13);
+    return ((this->header.flags_fragoffset & 0b1110000000000000) >> 13);
 }
 
 uint8_t IP_Header::getFragmentOffset() {
-    return (this->ip_header.flags_fragoffset & 0b0001111111111111);
+    return (this->header.flags_fragoffset & 0b0001111111111111);
 }
 
 uint16_t netToHostShort(uint16_t val) {

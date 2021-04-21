@@ -9,15 +9,15 @@ TEST(IP_Header, parse_header) {
 
     ASSERT_EQ(4, ip_header.getVersion());
     ASSERT_EQ(5, ip_header.getHeaderLen());
-    ASSERT_EQ(0, ip_header.ip_header.tos);
-    ASSERT_EQ(0xf2c8, ip_header.ip_header.id);
+    ASSERT_EQ(0, ip_header.header.tos);
+    ASSERT_EQ(0xf2c8, ip_header.header.id);
     ASSERT_EQ(0b010, ip_header.getFlags());
     ASSERT_EQ(0, ip_header.getFragmentOffset());
-    ASSERT_EQ(64, ip_header.ip_header.ttl);
-    ASSERT_EQ(1, ip_header.ip_header.protocol);
-    ASSERT_EQ(0x49de, ip_header.ip_header.header_checksum);
-    ASSERT_EQ(0x7f000001, ip_header.ip_header.src_addr);
-    ASSERT_EQ(0x7f000001, ip_header.ip_header.dst_addr);
+    ASSERT_EQ(64, ip_header.header.ttl);
+    ASSERT_EQ(1, ip_header.header.protocol);
+    ASSERT_EQ(0x49de, ip_header.header.header_checksum);
+    ASSERT_EQ(0x7f000001, ip_header.header.src_addr);
+    ASSERT_EQ(0x7f000001, ip_header.header.dst_addr);
 }
 
 int main(int argc, char *argv[]) {

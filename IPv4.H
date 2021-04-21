@@ -33,7 +33,7 @@ class IP_Header {
         uint8_t getFlags();
         uint8_t getFragmentOffset();
 
-        IPv4_Header_t ip_header;
+        IPv4_Header_t header;
 };
 
 uint16_t netToHostShort(uint16_t val);
