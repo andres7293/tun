@@ -25,11 +25,20 @@ uint8_t IP_Header::getHeaderLen() {
 }
 
 uint8_t IP_Header::getFlags() {
-    return ((this->header.flags_fragoffset & 0b1110000000000000) >> 13);
+    return ((this->header.flags_fragoffset & 0xE000) >> 13);
 }
 
 uint8_t IP_Header::getFragmentOffset() {
-    return (this->header.flags_fragoffset & 0b0001111111111111);
+    return (this->header.flags_fragoffset & 0x1FFF);
+}
+
+IPv4_Protocol IP_Header::getProtocol() {
+    if (this->header.protocol == 0x01) {
+        return IPv4_Protocol::ICMP;
+    }
+    else {
+        return IPv4_Protocol::UNKNOW;
+    }
 }
 
 uint16_t netToHostShort(uint16_t val) {

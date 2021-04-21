@@ -32,6 +32,7 @@ class IP_Header {
         uint8_t getHeaderLen();
         uint8_t getFlags();
         uint8_t getFragmentOffset();
+        IPv4_Protocol getProtocol();
 
         IPv4_Header_t header;
 };

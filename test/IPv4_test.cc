@@ -20,6 +20,13 @@ TEST(IP_Header, parse_header) {
     ASSERT_EQ(0x7f000001, ip_header.header.dst_addr);
 }
 
+TEST(IP_Header, getProtocol) {
+    IP_Header ip_header;
+    ip_header.parse((uint8_t *) ip_header_raw);
+
+    ASSERT_EQ(IPv4_Protocol::ICMP, ip_header.getProtocol());
+}
+
 int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
