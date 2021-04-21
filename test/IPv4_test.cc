@@ -41,31 +41,15 @@ TEST(IPv4_Header, validate_checksum) {
     delete[] zeroBuf;
 }
 
-/*
-TEST(IP_Header, parse_header) {
-    IP_Header ip_header;
-    ip_header.parse((uint8_t *) ip_header_raw);
-
-    ASSERT_EQ(4, ip_header.getVersion());
-    ASSERT_EQ(5, ip_header.getHeaderLen());
-    ASSERT_EQ(0, ip_header.header.tos);
-    ASSERT_EQ(0xf2c8, ip_header.header.id);
-    ASSERT_EQ(0b010, ip_header.getFlags());
-    ASSERT_EQ(0, ip_header.getFragmentOffset());
-    ASSERT_EQ(64, ip_header.header.ttl);
-    ASSERT_EQ(1, ip_header.header.protocol);
-    ASSERT_EQ(0x49de, ip_header.header.header_checksum);
-    ASSERT_EQ(0x7f000001, ip_header.header.src_addr);
-    ASSERT_EQ(0x7f000001, ip_header.header.dst_addr);
+TEST(util, netToHostShort) {
+    uint16_t big_endian = 0xAABB;
+    ASSERT_EQ(0xBBAA, netToHostShort(big_endian));
 }
 
-TEST(IP_Header, getHeaderLenInBytes) {
-    IP_Header ip_header;
-    ip_header.parse((uint8_t *) ip_header_raw);
-
-    ASSERT_EQ(20, ip_header.getHeaderLenInBytes());
+TEST(util, netToHostLong) {
+    uint32_t big_endian = 0xAABBCCDD;
+    ASSERT_EQ(0xDDCCBBAA, netToHostLong(big_endian));
 }
-*/
 
 int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
