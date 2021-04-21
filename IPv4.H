@@ -19,7 +19,7 @@ struct IPv4_Header_t {
     uint32_t dst_addr;
 }__attribute__((packed));
 
-class IP_Header {
+class IPv4_Header {
     public:
         static uint8_t getVersion(IPv4_Header_t *h);
         static uint8_t getHeaderLen(IPv4_Header_t *h);
