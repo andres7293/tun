@@ -32,9 +32,6 @@ class IPv4_Header {
 //uint16_t netToHostShort(uint16_t val);
 //uint32_t netToHostLong(uint32_t val);
 
-uint16_t swap_endian_u16(uint16_t val);
-uint32_t swap_endian_u32(uint32_t val);
-
 ostream& operator << (ostream& os, IPv4_Header_t &h);
 
 #endif

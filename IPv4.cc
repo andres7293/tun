@@ -40,26 +40,6 @@ bool IPv4_Header::validate_checksum(uint8_t *net_frame) {
     }
 }
 
-uint16_t swap_endian_u16(uint16_t val) {
-    uint16_t result;
-    uint8_t *dest = (uint8_t *) &result;
-    uint8_t *src  = (uint8_t *) &val;
-    dest[0] = src[1];
-    dest[1] = src[0];
-    return result;
-}
-
-uint32_t swap_endian_u32(uint32_t val) {
-    uint32_t result;
-    uint8_t *dest = (uint8_t *) &result;
-    uint8_t *src  = (uint8_t *) &val;
-    dest[0] = src[3];
-    dest[1] = src[2];
-    dest[2] = src[1];
-    dest[3] = src[0];
-    return result;
-}
-
 ostream& operator << (ostream& os, IPv4_Header_t &h) {
     os   << "IPv4_Header_t{"
          << "version_headerlen=0x" << hex << (int) h.version_headerlen << dec
