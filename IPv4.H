@@ -4,6 +4,9 @@
 #include <bits/stdint-uintn.h>
 #include <cstdint>
 #include <iostream>
+
+#include "Utils.H"
+
 using namespace std;
 
 struct IPv4_Header_t {
@@ -28,9 +31,6 @@ class IPv4_Header {
         static uint8_t getFragmentOffset(IPv4_Header_t *h);
         static bool    validate_checksum(uint8_t *net_frame);
 };
-
-//uint16_t netToHostShort(uint16_t val);
-//uint32_t netToHostLong(uint32_t val);
 
 ostream& operator << (ostream& os, IPv4_Header_t &h);
 

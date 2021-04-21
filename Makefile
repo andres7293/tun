@@ -1,5 +1,6 @@
 CXX=g++
 CXXFLAGS=-g -Wall -std=c++17
+SOURCES=main.cc IPv4.cc Utils.cc
 
 main.out:	main.cc IPv4.o Utils.o
 	${CXX} ${CXXFLAGS} $^ -o $@

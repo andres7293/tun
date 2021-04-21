@@ -42,18 +42,30 @@ TEST(IPv4_Header, validate_checksum) {
     delete[] zeroBuf;
 }
 
+TEST(utils, netToHostShort) {
+    uint16_t big_endian = 0xAABB;
+    uint16_t little_endian = 0xBBAA;
+    ASSERT_EQ(little_endian, utils::netToHostShort(big_endian));
+}
+
+TEST(utils, netToHostLong) {
+    uint32_t big_endian = 0xAABBCCDD;
+    uint32_t little_endian = 0xDDCCBBAA;
+    ASSERT_EQ(little_endian, utils::netToHostLong(big_endian));
+}
+
 TEST(utils, swap_endian_u16) {
     uint16_t big_endian = 0xAABB;
-    uint16_t litte_endian = 0xBBAA;
-    ASSERT_EQ(litte_endian, utils::swap_endian_u16(big_endian));
-    ASSERT_EQ(big_endian, utils::swap_endian_u16(litte_endian));
+    uint16_t little_endian = 0xBBAA;
+    ASSERT_EQ(little_endian, utils::swap_endian_u16(big_endian));
+    ASSERT_EQ(big_endian, utils::swap_endian_u16(little_endian));
 }
 
 TEST(utils, swap_endian_u32) {
     uint32_t big_endian = 0xAABBCCDD;
-    uint32_t litte_endian = 0xDDCCBBAA;
-    ASSERT_EQ(litte_endian, utils::swap_endian_u32(big_endian));
-    ASSERT_EQ(big_endian, utils::swap_endian_u32(litte_endian));
+    uint32_t little_endian = 0xDDCCBBAA;
+    ASSERT_EQ(little_endian, utils::swap_endian_u32(big_endian));
+    ASSERT_EQ(big_endian, utils::swap_endian_u32(little_endian));
 }
 
 int main(int argc, char *argv[]) {
