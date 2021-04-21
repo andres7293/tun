@@ -36,15 +36,6 @@ uint8_t IP_Header::getFragmentOffset() {
     return (this->header.flags_fragoffset & 0x1FFF);
 }
 
-IPv4_Protocol IP_Header::getProtocol() {
-    if (this->header.protocol == 0x01) {
-        return IPv4_Protocol::ICMP;
-    }
-    else {
-        return IPv4_Protocol::UNKNOW;
-    }
-}
-
 uint16_t netToHostShort(uint16_t val) {
     uint16_t result;
 

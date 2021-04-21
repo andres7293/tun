@@ -20,13 +20,6 @@ TEST(IP_Header, parse_header) {
     ASSERT_EQ(0x7f000001, ip_header.header.dst_addr);
 }
 
-TEST(IP_Header, getProtocol) {
-    IP_Header ip_header;
-    ip_header.parse((uint8_t *) ip_header_raw);
-
-    ASSERT_EQ(IPv4_Protocol::ICMP, ip_header.getProtocol());
-}
-
 TEST(IP_Header, getHeaderLenInBytes) {
     IP_Header ip_header;
     ip_header.parse((uint8_t *) ip_header_raw);

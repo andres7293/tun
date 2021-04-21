@@ -20,11 +20,6 @@ struct IPv4_Header_t {
         uint32_t dst_addr;
 }__attribute__((packed));
 
-enum class IPv4_Protocol {
-    ICMP = 0x01,
-    UNKNOW = 0xff
-};
-
 class IP_Header {
     public:
         void parse(uint8_t *net_frame);
@@ -33,7 +28,6 @@ class IP_Header {
         uint8_t getHeaderLenInBytes();
         uint8_t getFlags();
         uint8_t getFragmentOffset();
-        IPv4_Protocol getProtocol();
 
         IPv4_Header_t header;
 };
