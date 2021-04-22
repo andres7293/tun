@@ -43,21 +43,61 @@ TEST(IPv4_Header, validate_checksum) {
 }
 
 TEST(IPv4_Header, convertHeaderToHostEndian) {
-    IPv4_Header_t *neth = (IPv4_Header_t *) net_ip_frame_raw;
+    IPv4_Header_t neth = {
+        .version_headerlen = 0x45,
+        .tos               = 0x00,
+        .total_len         = 0xAABB,
+        .id                = 0xAABB,
+        .flags_fragoffset  = 0x0040,
+        .ttl               = 0xAA,
+        .protocol          = 0x01,
+        .header_checksum   = 0xAABB,
+        .src_addr          = 0xAABBCCDD,
+        .dst_addr          = 0xAABBCCDD
+    };
     IPv4_Header_t hosth;
-    IPv4_Header::convertHeaderToHostEndian(&hosth, neth);
+    IPv4_Header::convertHeaderToHostEndian(&hosth, &neth);
     ASSERT_EQ(0x4, IPv4_Header::getVersion(&hosth));
     ASSERT_EQ(0x5, IPv4_Header::getHeaderLen(&hosth));
     ASSERT_EQ(20, IPv4_Header::getHeaderLenInBytes(&hosth));
-    ASSERT_EQ(84, hosth.total_len);
-    ASSERT_EQ(0xF2C8, hosth.id);
+    ASSERT_EQ(0xBBAA, hosth.total_len);
+    ASSERT_EQ(0xBBAA, hosth.id);
     ASSERT_EQ(0b010, IPv4_Header::getFlags(&hosth));
     ASSERT_EQ(0, IPv4_Header::getFragmentOffset(&hosth));
-    ASSERT_EQ(64, hosth.ttl);
+    ASSERT_EQ(0xAA, hosth.ttl);
     ASSERT_EQ(0x1, hosth.protocol);
-    ASSERT_EQ(0x49DE, hosth.header_checksum);
-    ASSERT_EQ(0x7F000001, hosth.src_addr);
-    ASSERT_EQ(0x7F000001, hosth.dst_addr);
+    ASSERT_EQ(0xBBAA, hosth.header_checksum);
+    ASSERT_EQ(0xDDCCBBAA, hosth.src_addr);
+    ASSERT_EQ(0xDDCCBBAA, hosth.dst_addr);
+}
+
+TEST(IPv4_Header, convertHeaderToNetEndian) {
+    IPv4_Header_t hosth = {
+        .version_headerlen = 0x45,
+        .tos               = 0x00,
+        .total_len         = 0xAABB,
+        .id                = 0xAABB,
+        .flags_fragoffset  = 0x0040,
+        .ttl               = 0xAA,
+        .protocol          = 0x01,
+        .header_checksum   = 0xAABB,
+        .src_addr          = 0xAABBCCDD,
+        .dst_addr          = 0xAABBCCDD
+    };
+    IPv4_Header_t neth;
+    IPv4_Header::convertHeaderToNetEndian(&neth, &hosth);
+    ASSERT_EQ(0x4, IPv4_Header::getVersion(&neth));
+    ASSERT_EQ(0x5, IPv4_Header::getHeaderLen(&neth));
+    ASSERT_EQ(20, IPv4_Header::getHeaderLenInBytes(&neth));
+    ASSERT_EQ(0xBBAA, neth.total_len);
+    ASSERT_EQ(0xBBAA, neth.id);
+    ASSERT_EQ(0b010, IPv4_Header::getFlags(&neth));
+    ASSERT_EQ(0, IPv4_Header::getFragmentOffset(&neth));
+    ASSERT_EQ(0xAA, neth.ttl);
+    ASSERT_EQ(0x1, neth.protocol);
+    ASSERT_EQ(0xBBAA, neth.header_checksum);
+    ASSERT_EQ(0xDDCCBBAA, neth.src_addr);
+    ASSERT_EQ(0xDDCCBBAA, neth.dst_addr);
 }
 
 TEST(utils, netToHostShort) {
