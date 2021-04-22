@@ -1,4 +1,5 @@
 #include "IPv4.H"
+#include "Utils.H"
 
 uint8_t IPv4_Header::getVersion(IPv4_Header_t *h) {
     return ((h->version_headerlen & 0xf0) >> 4);
@@ -52,14 +53,14 @@ void IPv4_Header::convertHeaderToHostEndian(IPv4_Header_t *host, IPv4_Header_t *
 void IPv4_Header::convertHeaderToNetEndian(IPv4_Header_t *net, IPv4_Header_t *host) {
     net->version_headerlen = host->version_headerlen;
     net->tos               = host->tos;
-    net->total_len         = utils::netToHostShort(host->total_len);
-    net->id                = utils::netToHostShort(host->id);
-    net->flags_fragoffset  = utils::netToHostShort(host->flags_fragoffset);
+    net->total_len         = utils::hostToNetShort(host->total_len);
+    net->id                = utils::hostToNetShort(host->id);
+    net->flags_fragoffset  = utils::hostToNetShort(host->flags_fragoffset);
     net->ttl               = host->ttl;
     net->protocol          = host->protocol;
-    net->header_checksum   = utils::netToHostShort(host->header_checksum);
-    net->src_addr          = utils::netToHostLong(host->src_addr);
-    net->dst_addr          = utils::netToHostLong(host->dst_addr);
+    net->header_checksum   = utils::hostToNetShort(host->header_checksum);
+    net->src_addr          = utils::hostToNetLong(host->src_addr);
+    net->dst_addr          = utils::hostToNetLong(host->dst_addr);
 }
 
 ostream& operator << (ostream& os, IPv4_Header_t &h) {
