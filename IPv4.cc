@@ -21,22 +21,19 @@ uint8_t IPv4_Header::getFragmentOffset(IPv4_Header_t *h) {
 }
 
 /*The header must be validated in Network Endian Order (Big Endian)*/
-bool IPv4_Header::validate_checksum(uint8_t *net_frame) {
-    IPv4_Header_t *h = (IPv4_Header_t *) net_frame;
-    uint8_t num_blocks_of_16bits = IPv4_Header::getHeaderLenInBytes(h) / 2;
+uint16_t IPv4_Header::validate_header_checksum(uint8_t *header_frame, uint8_t header_size) {
+    if (header_size < IPv4_Header::MIN_IP_HEADER_SIZE_BYTES) {
+        return 1;
+    }
+    uint8_t num_blocks_of_16bits = IPv4_Header::MIN_IP_HEADER_SIZE_BYTES / 2;
     uint32_t u32_sum = 0;
-    uint16_t *p = (uint16_t *) net_frame;
-    for (uint8_t i = 0; i < num_blocks_of_16bits; i++)
+    uint16_t *p = (uint16_t *) header_frame;
+    for (uint32_t i = 0; i < num_blocks_of_16bits; i++) {
         u32_sum += p[i];
+    }
     uint16_t carry = ((u32_sum & 0x000f0000) >> 16);
     uint16_t u16_sum = (u32_sum & 0x0000ffff);
-    uint16_t result = ~(u16_sum + carry);
-    if (result != 0) {
-        return false;
-    }
-    else {
-        return true;
-    }
+    return ~(u16_sum + carry);
 }
 
 void IPv4_Header::convertHeaderToHostEndian(IPv4_Header_t *host, IPv4_Header_t *net) {

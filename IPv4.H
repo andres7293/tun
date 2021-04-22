@@ -27,9 +27,11 @@ class IPv4_Header {
         static uint8_t getHeaderLenInBytes(IPv4_Header_t *h);
         static uint8_t getFlags(IPv4_Header_t *h);
         static uint8_t getFragmentOffset(IPv4_Header_t *h);
-        static bool    validate_checksum(uint8_t *net_frame);
+        static uint16_t  validate_header_checksum(uint8_t *header_frame, uint8_t header_size);
         static void    convertHeaderToHostEndian(IPv4_Header_t *host, IPv4_Header_t *net);
         static void    convertHeaderToNetEndian(IPv4_Header_t *net, IPv4_Header_t *host);
+
+        static const int MIN_IP_HEADER_SIZE_BYTES = 20;
 };
 
 ostream& operator << (ostream& os, IPv4_Header_t &h);

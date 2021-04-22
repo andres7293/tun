@@ -35,10 +35,10 @@ TEST(IPv4_Header, getFragmentOffset) {
     ASSERT_EQ(0, IPv4_Header::getFragmentOffset(&ip_header));
 }
 
-TEST(IPv4_Header, validate_checksum) {
-    ASSERT_EQ(true, IPv4_Header::validate_checksum((uint8_t *)net_ip_frame_raw));
+TEST(IPv4_Header, validate_header_checksum) {
+    ASSERT_EQ(0, IPv4_Header::validate_header_checksum((uint8_t *)net_ip_frame_raw, 20));
     uint8_t *zeroBuf = new uint8_t[20];
-    ASSERT_EQ(false, IPv4_Header::validate_checksum(zeroBuf));
+    ASSERT_NE(1, IPv4_Header::validate_header_checksum(zeroBuf, 20));
     delete[] zeroBuf;
 }
 
