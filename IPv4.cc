@@ -1,6 +1,17 @@
 #include "IPv4.H"
 #include "Utils.H"
 
+int8_t IPv4_Header::validate_header(uint8_t *net_frame, uint8_t size) {
+    if (size < IPv4_Header::MIN_IP_HEADER_SIZE_BYTES)
+        return -1;
+    IPv4_Header_t *h = (IPv4_Header_t *) net_frame;
+    if (IPv4_Header::getHeaderLenInBytes(h) != IPv4_Header::MIN_IP_HEADER_SIZE_BYTES)
+        return -2;
+    if (IPv4_Header::validate_header_checksum(net_frame, size) != 0)
+        return -3;
+    return 0;
+}
+
 uint8_t IPv4_Header::getVersion(IPv4_Header_t *h) {
     return ((h->version_headerlen & 0xf0) >> 4);
 }
