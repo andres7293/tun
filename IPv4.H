@@ -28,6 +28,8 @@ class IPv4_Header {
         static uint8_t getFlags(IPv4_Header_t *h);
         static uint8_t getFragmentOffset(IPv4_Header_t *h);
         static bool    validate_checksum(uint8_t *net_frame);
+        static void    convertHeaderToHostEndian(IPv4_Header_t *host, IPv4_Header_t *net);
+        static void    convertHeaderToNetEndian(IPv4_Header_t *net, IPv4_Header_t *host);
 };
 
 ostream& operator << (ostream& os, IPv4_Header_t &h);

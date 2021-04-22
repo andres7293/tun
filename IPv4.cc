@@ -20,6 +20,7 @@ uint8_t IPv4_Header::getFragmentOffset(IPv4_Header_t *h) {
     return (h->flags_fragoffset & 0x1FFF);
 }
 
+/*The header must be validated in Network Endian Order (Big Endian)*/
 bool IPv4_Header::validate_checksum(uint8_t *net_frame) {
     IPv4_Header_t *h = (IPv4_Header_t *) net_frame;
     uint8_t num_blocks_of_16bits = IPv4_Header::getHeaderLenInBytes(h) / 2;
@@ -36,6 +37,32 @@ bool IPv4_Header::validate_checksum(uint8_t *net_frame) {
     else {
         return true;
     }
+}
+
+void IPv4_Header::convertHeaderToHostEndian(IPv4_Header_t *host, IPv4_Header_t *net) {
+    host->version_headerlen = net->version_headerlen;
+    host->tos = net->tos;
+    host->total_len = utils::netToHostShort(net->total_len);
+    host->id = utils::netToHostShort(net->id);
+    host->flags_fragoffset = utils::netToHostShort(net->flags_fragoffset);
+    host->ttl = net->ttl;
+    host->protocol = net->protocol;
+    host->header_checksum = utils::netToHostShort(net->header_checksum);
+    host->src_addr = utils::netToHostLong(net->src_addr);
+    host->dst_addr = utils::netToHostLong(net->dst_addr);
+}
+
+void IPv4_Header::convertHeaderToNetEndian(IPv4_Header_t *net, IPv4_Header_t *host) {
+    net->version_headerlen = host->version_headerlen;
+    net->tos = host->tos;
+    net->total_len = utils::netToHostShort(host->total_len);
+    net->id = utils::netToHostShort(host->id);
+    net->flags_fragoffset = utils::netToHostShort(host->flags_fragoffset);
+    net->ttl = host->ttl;
+    net->protocol = host->protocol;
+    net->header_checksum = utils::netToHostShort(host->header_checksum);
+    net->src_addr = utils::netToHostLong(host->src_addr);
+    net->dst_addr = utils::netToHostLong(host->dst_addr);
 }
 
 ostream& operator << (ostream& os, IPv4_Header_t &h) {

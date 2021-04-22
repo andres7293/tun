@@ -42,6 +42,24 @@ TEST(IPv4_Header, validate_checksum) {
     delete[] zeroBuf;
 }
 
+TEST(IPv4_Header, convertHeaderToHostEndian) {
+    IPv4_Header_t *neth = (IPv4_Header_t *) net_ip_frame_raw;
+    IPv4_Header_t hosth;
+    IPv4_Header::convertHeaderToHostEndian(&hosth, neth);
+    ASSERT_EQ(0x4, IPv4_Header::getVersion(&hosth));
+    ASSERT_EQ(0x5, IPv4_Header::getHeaderLen(&hosth));
+    ASSERT_EQ(20, IPv4_Header::getHeaderLenInBytes(&hosth));
+    ASSERT_EQ(84, hosth.total_len);
+    ASSERT_EQ(0xF2C8, hosth.id);
+    ASSERT_EQ(0b010, IPv4_Header::getFlags(&hosth));
+    ASSERT_EQ(0, IPv4_Header::getFragmentOffset(&hosth));
+    ASSERT_EQ(64, hosth.ttl);
+    ASSERT_EQ(0x1, hosth.protocol);
+    ASSERT_EQ(0x49DE, hosth.header_checksum);
+    ASSERT_EQ(0x7F000001, hosth.src_addr);
+    ASSERT_EQ(0x7F000001, hosth.dst_addr);
+}
+
 TEST(utils, netToHostShort) {
     uint16_t big_endian = 0xAABB;
     uint16_t little_endian = 0xBBAA;
