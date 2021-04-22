@@ -1,14 +1,12 @@
 CXX=g++
 CXXFLAGS=-g -Wall -std=c++17
 SOURCES=main.cc IPv4.cc Utils.cc
+OBJECTS=$(SOURCES:.cc=.o)
 
-main.out:	main.cc IPv4.o Utils.o
+main.out:	$(OBJECTS)
 	${CXX} ${CXXFLAGS} $^ -o $@
 
-IPv4.o:	IPv4.cc
-	${CXX} ${CXXFLAGS} -c $^ -o $@
-
-Utils.o:	Utils.cc
+%.o:	%.cc
 	${CXX} ${CXXFLAGS} -c $^ -o $@
 
 buildtest:
