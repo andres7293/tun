@@ -1,6 +1,14 @@
 #include "IPv4.H"
 #include "Utils.H"
 
+int8_t IPv4::validate_ip_packet_size(uint16_t ip_packet_size) {
+    if (ip_packet_size < IPv4_Header::MIN_IP_HEADER_SIZE_BYTES)
+        return -1;
+    if (ip_packet_size > IPv4::MAX_IP_PACKET_SIZE)
+        return -2;
+    return 0;
+}
+
 int8_t IPv4::validate_header(uint8_t *ip_packet, uint16_t size) {
     if (size < IPv4_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -1;
