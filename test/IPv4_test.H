@@ -19,6 +19,8 @@ TEST(IPv4, validate_header) {
     //test bad checksum
     badHeader[0] = 0x45;
     ASSERT_EQ(-3, IPv4::validate_header(badHeader, 20));
+    //test if total_len of header doesnt match with the current packet size
+    ASSERT_EQ(-4, IPv4::validate_header((uint8_t *)net_ip_frame_raw, 1024));
     //good case
     ASSERT_EQ(0, IPv4::validate_header((uint8_t *)net_ip_frame_raw, sizeof(net_ip_frame_raw)));
     delete[] badHeader;

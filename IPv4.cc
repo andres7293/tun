@@ -17,6 +17,9 @@ int8_t IPv4::validate_header(uint8_t *ip_packet, uint16_t size) {
         return -2;
     if (IPv4::validate_header_checksum(ip_packet, size) != 0)
         return -3;
+    //checks if total_len specified in header match with the current packet size
+    if (size != utils::netToHostShort(h->total_len))
+        return -4;
     return 0;
 }
 
