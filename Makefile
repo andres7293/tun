@@ -19,4 +19,4 @@ runtest:
 	./test/test
 
 clean:
-	rm -f *.o *.out
+	rm -f *.o *.out src/*.o
