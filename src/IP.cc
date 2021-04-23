@@ -55,32 +55,6 @@ uint16_t IP::validate_header_checksum(uint8_t *header_frame, uint16_t size) {
     return ~(u16_sum + carry);
 }
 
-void IP::convertHeaderToHostEndian(IP_Header_t *host, IP_Header_t *net) {
-    host->version_headerlen = net->version_headerlen;
-    host->tos               = net->tos;
-    host->total_len         = utils::netToHostShort(net->total_len);
-    host->id                = utils::netToHostShort(net->id);
-    host->flags_fragoffset  = utils::netToHostShort(net->flags_fragoffset);
-    host->ttl               = net->ttl;
-    host->protocol          = net->protocol;
-    host->header_checksum   = utils::netToHostShort(net->header_checksum);
-    host->src_addr          = utils::netToHostLong(net->src_addr);
-    host->dst_addr          = utils::netToHostLong(net->dst_addr);
-}
-
-void IP::convertHeaderToNetEndian(IP_Header_t *net, IP_Header_t *host) {
-    net->version_headerlen = host->version_headerlen;
-    net->tos               = host->tos;
-    net->total_len         = utils::hostToNetShort(host->total_len);
-    net->id                = utils::hostToNetShort(host->id);
-    net->flags_fragoffset  = utils::hostToNetShort(host->flags_fragoffset);
-    net->ttl               = host->ttl;
-    net->protocol          = host->protocol;
-    net->header_checksum   = utils::hostToNetShort(host->header_checksum);
-    net->src_addr          = utils::hostToNetLong(host->src_addr);
-    net->dst_addr          = utils::hostToNetLong(host->dst_addr);
-}
-
 uint8_t IP_Header::getVersion(IP_Header_t *h) {
     return ((h->version_headerlen & 0xf0) >> 4);
 }
