@@ -1,6 +1,6 @@
 CXX=g++
 CXXFLAGS=-g -Wall -std=c++17
-SOURCES=main.cc IP.cc Utils.cc
+SOURCES=src/main.cc src/IP.cc src/Utils.cc
 OBJECTS=$(SOURCES:.cc=.o)
 
 main.out:	$(OBJECTS)

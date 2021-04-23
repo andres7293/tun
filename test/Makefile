@@ -7,12 +7,12 @@ OBJECTS=$(SOURCES:.cc=.o)
 all: test
 
 test:	test.o
-	make -C ../ IP.o
-	make -C ../ Utils.o
-	${CCXX} ${CXXFLAGS} $^ ../IP.o ../Utils.o -o $@ ${LIBS}
+	make -C ../src IP.o
+	make -C ../src Utils.o
+	${CCXX} ${CXXFLAGS} $^ ../src/IP.o ../src/Utils.o -o $@ ${LIBS}
 
 %.o:	%.cc
 	${CCXX} ${CXXFLAGS} -c $^ -o $@
 
 clean:
-	rm -f *.o *.out IPv4_test
+	rm -f *.o *.out IP_test

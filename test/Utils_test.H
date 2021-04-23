@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../Utils.H"
+#include "../src/Utils.H"
 
 TEST(utils, netToHostShort) {
     uint16_t big_endian = 0xAABB;
