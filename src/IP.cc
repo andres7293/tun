@@ -1,7 +1,7 @@
 #include "IP.H"
 #include "Utils.H"
 
-int8_t IP::validate_ip_packet_size(uint16_t ip_packet_size) {
+int IP::validate_ip_packet_size(uint16_t ip_packet_size) {
     if (ip_packet_size < IP_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -1;
     if (ip_packet_size > IP::MAX_IP_PACKET_SIZE)
@@ -9,7 +9,7 @@ int8_t IP::validate_ip_packet_size(uint16_t ip_packet_size) {
     return 0;
 }
 
-int8_t IP::validate_header(uint8_t *ip_packet, uint16_t size) {
+int IP::validate_header(uint8_t *ip_packet, uint16_t size) {
     if (size < IP_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -1;
     IP_Header_t *h = (IP_Header_t *) ip_packet;
