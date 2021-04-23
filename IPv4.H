@@ -22,7 +22,7 @@ struct IPv4_Header_t {
 
 class IPv4_Header {
     public:
-        static int8_t validate_header(uint8_t *net_frame, uint8_t size);
+        static int8_t validate_header(uint8_t *net_frame, uint16_t size);
         static uint8_t getVersion(IPv4_Header_t *h);
         static uint8_t getHeaderLen(IPv4_Header_t *h);
         static uint8_t getHeaderLenInBytes(IPv4_Header_t *h);

@@ -1,7 +1,7 @@
 #include "IPv4.H"
 #include "Utils.H"
 
-int8_t IPv4_Header::validate_header(uint8_t *net_frame, uint8_t size) {
+int8_t IPv4_Header::validate_header(uint8_t *net_frame, uint16_t size) {
     if (size < IPv4_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -1;
     IPv4_Header_t *h = (IPv4_Header_t *) net_frame;
