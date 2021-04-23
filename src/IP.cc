@@ -1,6 +1,22 @@
 #include "IP.H"
 #include "Utils.H"
 
+int IP::ip_rcv(uint8_t *ip_packet, uint16_t size) {
+    if (IP::validate_ip_packet_size(size) != 0)
+        return -1;
+    if (IP::validate_header(ip_packet, size) != 0)
+        return -2;
+    IP_Header_t *h = (IP_Header_t *) ip_packet;
+    if (IP_Header::getVersion(h) != 4)
+        return -3;
+
+    switch (h->protocol) {
+        case IP::ICMPV4_PROTOCOL:
+            break;
+    }
+    return 0;
+}
+
 int IP::validate_ip_packet_size(uint16_t ip_packet_size) {
     if (ip_packet_size < IP_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -1;

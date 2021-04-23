@@ -59,12 +59,7 @@ int main(void) {
         else {
             if (FD_ISSET(fd, &readfds)) {
                 ssize_t bytesRead = read(fd, buf, sizeof(buf));
-                if (bytesRead >= (int)sizeof(IP_Header_t)) {
-                    IP_Header_t *header = (IP_Header_t *) buf;
-                    if (header->protocol == 0x01) {
-                        print_header_host(header);
-                    }
-                }
+                IP::ip_rcv(buf, (uint16_t) bytesRead);
             }
             else if (FD_ISSET(fd, &writefds)) {
                 cout << "write available" << endl;
