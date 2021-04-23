@@ -16,7 +16,7 @@ cleantest:
 	make -C ./test clean
 
 runtest:
-	./test/IPv4_test
+	./test/test
 
 clean:
 	rm -f *.o *.out

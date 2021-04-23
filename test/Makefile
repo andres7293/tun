@@ -4,9 +4,9 @@ LIBS=-lgtest -lpthread
 SOURCES=IPv4_test.cc
 OBJECTS=$(SOURCES:.cc=.o)
 
-all: IPv4_test
+all: test
 
-IPv4_test:	IPv4_test.o
+test:	test.o
 	make -C ../ IPv4.o
 	make -C ../ Utils.o
 	${CCXX} ${CXXFLAGS} $^ ../IPv4.o ../Utils.o -o $@ ${LIBS}
