@@ -22,17 +22,21 @@ struct IPv4_Header_t {
 
 class IPv4_Header {
     public:
-        static int8_t validate_header(uint8_t *net_frame, uint16_t size);
         static uint8_t getVersion(IPv4_Header_t *h);
         static uint8_t getHeaderLen(IPv4_Header_t *h);
         static uint8_t getHeaderLenInBytes(IPv4_Header_t *h);
         static uint8_t getFlags(IPv4_Header_t *h);
         static uint8_t getFragmentOffset(IPv4_Header_t *h);
-        static uint16_t validate_header_checksum(uint8_t *header_frame, uint8_t header_size);
-        static void convertHeaderToHostEndian(IPv4_Header_t *host, IPv4_Header_t *net);
-        static void convertHeaderToNetEndian(IPv4_Header_t *net, IPv4_Header_t *host);
 
         static const int MIN_IP_HEADER_SIZE_BYTES = 20;
+};
+
+class IPv4 {
+    public:
+        static int8_t validate_header(uint8_t *ip_packet, uint16_t size);
+        static uint16_t validate_header_checksum(uint8_t *ip_packet, uint16_t size);
+        static void convertHeaderToHostEndian(IPv4_Header_t *host, IPv4_Header_t *net);
+        static void convertHeaderToNetEndian(IPv4_Header_t *net, IPv4_Header_t *host);
 };
 
 ostream& operator << (ostream& os, IPv4_Header_t &h);

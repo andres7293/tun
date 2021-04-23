@@ -4,17 +4,25 @@
 /*network ip packet*/
 const uint8_t net_ip_frame_raw[] = {0x45, 0x00, 0x00, 0x54, 0xf2, 0xc8, 0x40, 0x00, 0x40, 0x01, 0x49, 0xde, 0x7f, 0x00, 0x00, 0x01, 0x7f, 0x00, 0x00, 0x01, 0x08, 0x00, 0x4f, 0xff, 0x61, 0xfa, 0x00, 0x01, 0x8f, 0xe1, 0x7f, 0x60, 0x00, 0x00, 0x00, 0x00, 0x76, 0xf0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37};
 
-TEST(IPv4_Header, validate_header) {
+TEST(IPv4, validate_header) {
     uint8_t *badHeader = new uint8_t[20];
-    ASSERT_EQ(-1, IPv4_Header::validate_header(badHeader, 0));
-    ASSERT_EQ(-2, IPv4_Header::validate_header(badHeader, 20));
+    ASSERT_EQ(-1, IPv4::validate_header(badHeader, 0));
+    ASSERT_EQ(-2, IPv4::validate_header(badHeader, 20));
     //test bad checksum
     badHeader[0] = 0x45;
-    ASSERT_EQ(-3, IPv4_Header::validate_header(badHeader, 20));
+    ASSERT_EQ(-3, IPv4::validate_header(badHeader, 20));
     //good case
-    ASSERT_EQ(0, IPv4_Header::validate_header((uint8_t *)net_ip_frame_raw, sizeof(net_ip_frame_raw)));
+    ASSERT_EQ(0, IPv4::validate_header((uint8_t *)net_ip_frame_raw, sizeof(net_ip_frame_raw)));
     delete[] badHeader;
 }
+
+TEST(IPv4, validate_header_checksum) {
+    ASSERT_EQ(0, IPv4::validate_header_checksum((uint8_t *)net_ip_frame_raw, 20));
+    uint8_t *zeroBuf = new uint8_t[20];
+    ASSERT_NE(1, IPv4::validate_header_checksum(zeroBuf, 20));
+    delete[] zeroBuf;
+}
+
 
 TEST(IPv4_Header, getVersion) {
     IPv4_Header_t ip_header;
@@ -46,14 +54,7 @@ TEST(IPv4_Header, getFragmentOffset) {
     ASSERT_EQ(0, IPv4_Header::getFragmentOffset(&ip_header));
 }
 
-TEST(IPv4_Header, validate_header_checksum) {
-    ASSERT_EQ(0, IPv4_Header::validate_header_checksum((uint8_t *)net_ip_frame_raw, 20));
-    uint8_t *zeroBuf = new uint8_t[20];
-    ASSERT_NE(1, IPv4_Header::validate_header_checksum(zeroBuf, 20));
-    delete[] zeroBuf;
-}
-
-TEST(IPv4_Header, convertHeaderToHostEndian) {
+TEST(IPv4, convertHeaderToHostEndian) {
     IPv4_Header_t neth = {
         .version_headerlen = 0x45,
         .tos               = 0x00,
@@ -67,7 +68,7 @@ TEST(IPv4_Header, convertHeaderToHostEndian) {
         .dst_addr          = 0xAABBCCDD
     };
     IPv4_Header_t hosth;
-    IPv4_Header::convertHeaderToHostEndian(&hosth, &neth);
+    IPv4::convertHeaderToHostEndian(&hosth, &neth);
     ASSERT_EQ(0x4, IPv4_Header::getVersion(&hosth));
     ASSERT_EQ(0x5, IPv4_Header::getHeaderLen(&hosth));
     ASSERT_EQ(20, IPv4_Header::getHeaderLenInBytes(&hosth));
@@ -82,7 +83,7 @@ TEST(IPv4_Header, convertHeaderToHostEndian) {
     ASSERT_EQ(0xDDCCBBAA, hosth.dst_addr);
 }
 
-TEST(IPv4_Header, convertHeaderToNetEndian) {
+TEST(IPv4, convertHeaderToNetEndian) {
     IPv4_Header_t hosth = {
         .version_headerlen = 0x45,
         .tos               = 0x00,
@@ -96,7 +97,7 @@ TEST(IPv4_Header, convertHeaderToNetEndian) {
         .dst_addr          = 0xAABBCCDD
     };
     IPv4_Header_t neth;
-    IPv4_Header::convertHeaderToNetEndian(&neth, &hosth);
+    IPv4::convertHeaderToNetEndian(&neth, &hosth);
     ASSERT_EQ(0x4, IPv4_Header::getVersion(&neth));
     ASSERT_EQ(0x5, IPv4_Header::getHeaderLen(&neth));
     ASSERT_EQ(20, IPv4_Header::getHeaderLenInBytes(&neth));
