@@ -1,21 +1,21 @@
-#include "IPv4.H"
+#include "IP.H"
 #include "Utils.H"
 
-int8_t IPv4::validate_ip_packet_size(uint16_t ip_packet_size) {
-    if (ip_packet_size < IPv4_Header::MIN_IP_HEADER_SIZE_BYTES)
+int8_t IP::validate_ip_packet_size(uint16_t ip_packet_size) {
+    if (ip_packet_size < IP_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -1;
-    if (ip_packet_size > IPv4::MAX_IP_PACKET_SIZE)
+    if (ip_packet_size > IP::MAX_IP_PACKET_SIZE)
         return -2;
     return 0;
 }
 
-int8_t IPv4::validate_header(uint8_t *ip_packet, uint16_t size) {
-    if (size < IPv4_Header::MIN_IP_HEADER_SIZE_BYTES)
+int8_t IP::validate_header(uint8_t *ip_packet, uint16_t size) {
+    if (size < IP_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -1;
-    IPv4_Header_t *h = (IPv4_Header_t *) ip_packet;
-    if (IPv4_Header::getHeaderLenInBytes(h) != IPv4_Header::MIN_IP_HEADER_SIZE_BYTES)
+    IP_Header_t *h = (IP_Header_t *) ip_packet;
+    if (IP_Header::getHeaderLenInBytes(h) != IP_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -2;
-    if (IPv4::validate_header_checksum(ip_packet, size) != 0)
+    if (IP::validate_header_checksum(ip_packet, size) != 0)
         return -3;
     //checks if total_len specified in header match with the current packet size
     if (size != utils::netToHostShort(h->total_len))
@@ -24,11 +24,11 @@ int8_t IPv4::validate_header(uint8_t *ip_packet, uint16_t size) {
 }
 
 /*The header must be validated in Network Endian Order (Big Endian)*/
-uint16_t IPv4::validate_header_checksum(uint8_t *header_frame, uint16_t size) {
-    if (size < IPv4_Header::MIN_IP_HEADER_SIZE_BYTES) {
+uint16_t IP::validate_header_checksum(uint8_t *header_frame, uint16_t size) {
+    if (size < IP_Header::MIN_IP_HEADER_SIZE_BYTES) {
         return 1;
     }
-    uint8_t num_blocks_of_16bits = IPv4_Header::MIN_IP_HEADER_SIZE_BYTES / 2;
+    uint8_t num_blocks_of_16bits = IP_Header::MIN_IP_HEADER_SIZE_BYTES / 2;
     uint32_t u32_sum = 0;
     uint16_t *p = (uint16_t *) header_frame;
     for (uint32_t i = 0; i < num_blocks_of_16bits; i++) {
@@ -39,7 +39,7 @@ uint16_t IPv4::validate_header_checksum(uint8_t *header_frame, uint16_t size) {
     return ~(u16_sum + carry);
 }
 
-void IPv4::convertHeaderToHostEndian(IPv4_Header_t *host, IPv4_Header_t *net) {
+void IP::convertHeaderToHostEndian(IP_Header_t *host, IP_Header_t *net) {
     host->version_headerlen = net->version_headerlen;
     host->tos               = net->tos;
     host->total_len         = utils::netToHostShort(net->total_len);
@@ -52,7 +52,7 @@ void IPv4::convertHeaderToHostEndian(IPv4_Header_t *host, IPv4_Header_t *net) {
     host->dst_addr          = utils::netToHostLong(net->dst_addr);
 }
 
-void IPv4::convertHeaderToNetEndian(IPv4_Header_t *net, IPv4_Header_t *host) {
+void IP::convertHeaderToNetEndian(IP_Header_t *net, IP_Header_t *host) {
     net->version_headerlen = host->version_headerlen;
     net->tos               = host->tos;
     net->total_len         = utils::hostToNetShort(host->total_len);
@@ -65,28 +65,28 @@ void IPv4::convertHeaderToNetEndian(IPv4_Header_t *net, IPv4_Header_t *host) {
     net->dst_addr          = utils::hostToNetLong(host->dst_addr);
 }
 
-uint8_t IPv4_Header::getVersion(IPv4_Header_t *h) {
+uint8_t IP_Header::getVersion(IP_Header_t *h) {
     return ((h->version_headerlen & 0xf0) >> 4);
 }
 
-uint8_t IPv4_Header::getHeaderLen(IPv4_Header_t *h) {
+uint8_t IP_Header::getHeaderLen(IP_Header_t *h) {
     return (h->version_headerlen & 0x0f);
 }
 
-uint8_t IPv4_Header::getHeaderLenInBytes(IPv4_Header_t *h) {
+uint8_t IP_Header::getHeaderLenInBytes(IP_Header_t *h) {
     return getHeaderLen(h) * 4;
 }
 
-uint8_t IPv4_Header::getFlags(IPv4_Header_t *h) {
+uint8_t IP_Header::getFlags(IP_Header_t *h) {
     return ((h->flags_fragoffset & 0xE000) >> 13);
 }
 
-uint8_t IPv4_Header::getFragmentOffset(IPv4_Header_t *h) {
+uint8_t IP_Header::getFragmentOffset(IP_Header_t *h) {
     return (h->flags_fragoffset & 0x1FFF);
 }
 
-ostream& operator << (ostream& os, IPv4_Header_t &h) {
-    os   << "IPv4_Header_t{"
+ostream& operator << (ostream& os, IP_Header_t &h) {
+    os   << "IP_Header_t{"
          << "version_headerlen=0x" << hex << (int) h.version_headerlen << dec
          << ",tos=0x"              << hex << (int) h.tos               << dec
          << ",total_len=0x"        << hex << (int) h.total_len         << dec
