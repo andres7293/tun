@@ -16,10 +16,9 @@
 
 #include "IP.H"
 #include "Utils.H"
+#include "TunIf.H"
 
 using namespace std;
-
-int tun_alloc(char *dev);
 
 uint8_t buf[1024 * 1];
 
@@ -58,7 +57,7 @@ int main(void) {
         }
         else {
             if (FD_ISSET(fd, &readfds)) {
-                ssize_t bytesRead = read(fd, buf, sizeof(buf));
+                ssize_t bytesRead = tun_read(fd, buf, sizeof(buf));
                 IP::ip_rcv(buf, (uint16_t) bytesRead);
             }
             else if (FD_ISSET(fd, &writefds)) {
@@ -76,33 +75,6 @@ int main(void) {
     }
     close(fd);
     return 0;
-}
-
-int tun_alloc(char *dev)
-{
-    struct ifreq ifr;
-    int fd, err;
-
-    if( (fd = open("/dev/net/tun", O_RDWR | O_NONBLOCK)) < 0 )
-        return fd;
-
-    memset(&ifr, 0, sizeof(ifr));
-
-    /* Flags: IFF_TUN   - TUN device (no Ethernet headers) 
-     *        IFF_TAP   - TAP device  
-     *
-     *        IFF_NO_PI - Do not provide packet information  
-     */ 
-    ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
-    if( *dev )
-        strncpy(ifr.ifr_name, dev, IFNAMSIZ);
-
-    if( (err = ioctl(fd, TUNSETIFF, (void *) &ifr)) < 0 ){
-        close(fd);
-        return err;
-    }
-    strcpy(dev, ifr.ifr_name);
-    return fd;
 }
 
 void print_header_host(IP_Header_t *h) {
