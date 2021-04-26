@@ -1,7 +1,7 @@
 #include "IP.H"
 #include "Utils.H"
 
-int IP::ip_rcv(uint8_t *ip_packet, uint16_t size) {
+int IP::ip_input(NetDev &netdev, uint8_t *ip_packet, uint16_t size) {
     if (IP::validate_ip_packet_size(size) != 0)
         return -1;
     if (IP::validate_header(ip_packet, size) != 0)
