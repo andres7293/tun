@@ -7,6 +7,7 @@ const uint8_t net_ip_frame_raw[] = {0x45, 0x00, 0x00, 0x54, 0xf2, 0xc8, 0x40, 0x
 TEST(IP, ip_rcv) {
     //TODO test ipv6 version
     uint8_t *badHeader = new uint8_t[20];
+    memset((uint8_t *) badHeader, 0, 20);
     ASSERT_EQ(-1, IP::ip_rcv(badHeader, 0));
     ASSERT_EQ(-2, IP::ip_rcv(badHeader, 20));
     ASSERT_EQ(0, IP::ip_rcv((uint8_t *)net_ip_frame_raw, sizeof(net_ip_frame_raw)));
@@ -23,6 +24,7 @@ TEST(IP, validate_ip_packet_size) {
 
 TEST(IP, validate_header) {
     uint8_t *badHeader = new uint8_t[20];
+    memset((uint8_t *) badHeader, 0, 20);
     ASSERT_EQ(-1, IP::validate_header(badHeader, 0));
     ASSERT_EQ(-2, IP::validate_header(badHeader, 20));
     //test bad checksum
@@ -38,6 +40,7 @@ TEST(IP, validate_header) {
 TEST(IP, validate_header_checksum) {
     ASSERT_EQ(0, IP::validate_header_checksum((uint8_t *)net_ip_frame_raw, 20));
     uint8_t *zeroBuf = new uint8_t[20];
+    memset((uint8_t *) zeroBuf, 0, 20);
     ASSERT_NE(1, IP::validate_header_checksum(zeroBuf, 20));
     delete[] zeroBuf;
 }
