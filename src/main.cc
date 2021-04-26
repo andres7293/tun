@@ -1,18 +1,10 @@
 #include <cstdint>
 #include <iostream>
 
-#include <net/if.h>
-#include <linux/if_tun.h>
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
 #include <stdlib.h>
-#include <sys/select.h>
-#include <sys/time.h>
 
 #include "IP.H"
 #include "Utils.H"
@@ -25,55 +17,16 @@ uint8_t buf[1024 * 1];
 void print_header_host(IP_Header_t *h);
 
 int main(void) {
-    string dev = "tun0";
-    int fd = tun_alloc((char *)dev.c_str());
-    if (fd < 0) {
+    TunIf tunif("tun0");
+    if (!tunif.alloc()) {
         cout << "Error opening /dev/tun" << endl;
+        return -1;
     }
-
-    struct timeval tv = {
-        .tv_sec = 5,
-        .tv_usec = 0
-    };
-    fd_set readfds;
-    fd_set writefds;
-    fd_set exceptfds;
-
-    FD_ZERO(&readfds);
-    FD_ZERO(&writefds);
-    FD_ZERO(&exceptfds);
-
-    FD_SET(fd, &readfds);
-    FD_SET(fd, &writefds);
-    FD_SET(fd, &exceptfds);
-
     while (1) {
-        int ret = select(fd + 1, &readfds, NULL, NULL, &tv);
-        if (ret == -1) {
-            cout << "Error select: errno = " << errno << endl;
-        }
-        else if (ret == 0) {
-            //timeout
-        }
-        else {
-            if (FD_ISSET(fd, &readfds)) {
-                ssize_t bytesRead = tun_read(fd, buf, sizeof(buf));
-                IP::ip_rcv(buf, (uint16_t) bytesRead);
-            }
-            else if (FD_ISSET(fd, &writefds)) {
-                cout << "write available" << endl;
-            }
-            else if (FD_ISSET(fd, &exceptfds)) {
-                cout << "except available" << endl;
-            }
-        }
-        tv.tv_sec = 5;
-        tv.tv_usec = 0;
-        FD_SET(fd, &readfds);
-        //FD_SET(fd, &writefds);
-        //FD_SET(fd, &exceptfds);
+        ssize_t bytesRead = tunif.tunread(buf, sizeof(buf));
+        IP::ip_rcv(buf, (uint16_t) bytesRead);
     }
-    close(fd);
+    tunif.dealloc();
     return 0;
 }
 

@@ -3,9 +3,34 @@
 
 #include <stdint.h>
 #include <sys/types.h>
+#include <string>
+#include <iostream>
 
-int tun_alloc(char *dev);
-ssize_t tun_read(int fd, uint8_t *buf, size_t len);
-ssize_t tun_write(int fd, uint8_t *buf, size_t len);
+using namespace std;
+
+class TunIf {
+    public:
+        TunIf(string tun_name);
+        bool alloc();
+        int dealloc();
+        bool isAllocated();
+        int getErrno();
+        int getFd();
+        string& getTunName();
+
+        ssize_t tunread(uint8_t *buf, size_t len);
+        ssize_t tunwrite(uint8_t *buf, size_t len);
+    private:
+        string tun_name;
+        int fd;
+
+        fd_set readfds;
+        fd_set writefds;
+        fd_set exceptfds;
+        struct timeval tv;
+
+        int tun_alloc(char *dev);
+};
+
 
 #endif
