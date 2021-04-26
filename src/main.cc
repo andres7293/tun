@@ -9,6 +9,7 @@
 #include "IP.H"
 #include "Utils.H"
 #include "TunIf.H"
+#include "NetDev.H"
 
 using namespace std;
 
