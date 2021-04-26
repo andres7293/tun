@@ -37,8 +37,8 @@ class IP {
         static int validate_ip_packet_size(uint16_t ip_packet_size);
         static int validate_header(uint8_t *ip_packet, uint16_t size);
         static uint16_t validate_header_checksum(uint8_t *ip_packet, uint16_t size);
-        static void convertHeaderToHostEndian(IP_Header_t *host, IP_Header_t *net);
-        static void convertHeaderToNetEndian(IP_Header_t *net, IP_Header_t *host);
+        static uint8_t* getPayload(uint8_t *ip_packet, uint16_t size);
+        static uint16_t getPayloadSize(uint8_t *ip_packet, uint16_t size);
 
         static const int MAX_IP_PACKET_SIZE = 65535;
         static const int MIN_IP_PACKET_SIZE = 20;

@@ -55,6 +55,16 @@ uint16_t IP::validate_header_checksum(uint8_t *header_frame, uint16_t size) {
     return ~(u16_sum + carry);
 }
 
+uint8_t* IP::getPayload(uint8_t *ip_packet, uint16_t size) {
+    uint8_t *payload = (uint8_t *) ip_packet + sizeof(IP_Header_t);
+    return payload;
+}
+
+uint16_t IP::getPayloadSize(uint8_t *ip_packet, uint16_t size) {
+    IP_Header_t *h = (IP_Header_t *) ip_packet;
+    return utils::hostToNetShort(h->total_len) - IP_Header::getHeaderLenInBytes(h);
+}
+
 uint8_t IP_Header::getVersion(IP_Header_t *h) {
     return ((h->version_headerlen & 0xf0) >> 4);
 }

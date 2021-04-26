@@ -42,6 +42,14 @@ TEST(IP, validate_header_checksum) {
     delete[] zeroBuf;
 }
 
+TEST(IP, getPayload) {
+    uint8_t *payload = IP::getPayload((uint8_t *) net_ip_frame_raw, sizeof(net_ip_frame_raw));
+    ASSERT_EQ(0x08, *payload);
+}
+
+TEST(IP, getPayloadSize) {
+    ASSERT_EQ(64, IP::getPayloadSize((uint8_t *) net_ip_frame_raw, sizeof(net_ip_frame_raw)));
+}
 
 TEST(IP_Header, getVersion) {
     IP_Header_t ip_header;
