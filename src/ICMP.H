@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include "IP.H"
-#include "IP_Header.H"
 #include "NetDev.H"
 
 struct ICMP_Header_t {
