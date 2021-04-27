@@ -1,5 +1,34 @@
 #include "Utils.H"
 
+uint32_t utils::sum_every_16bits(void *addr, int count) {
+    /*
+        https://tools.ietf.org/html/rfc1071
+     * */
+    uint32_t sum = 0;
+    uint16_t * ptr = (uint16_t *)addr;
+    while (count > 1)  {
+        /*  This is the inner loop */
+        sum += * ptr++;
+        count -= 2;
+    }
+    /*  Add left-over byte, if any */
+    if (count > 0)
+        sum += * (uint8_t *) ptr;
+    return sum;
+}
+
+uint16_t utils::checksum(void *addr, int count, int start_sum) {
+    /*
+        https://tools.ietf.org/html/rfc1071
+     * */
+    uint32_t sum = start_sum;
+    sum += sum_every_16bits(addr, count);
+    /*  Fold 32-bit sum to 16 bits */
+    while (sum >> 16)
+        sum = (sum & 0xffff) + (sum >> 16);
+    return ~sum;
+}
+
 uint16_t utils::netToHostShort(uint16_t val) {
     #if ((__BYTE_ORDER__) == (__ORDER_LITTLE_ENDIAN__))
         return utils::swap_endian_u16(val);
