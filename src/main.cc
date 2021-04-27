@@ -15,8 +15,6 @@ using namespace std;
 
 uint8_t buf[1024 * 1];
 
-void print_header_host(IP_Header_t *h);
-
 int main(void) {
     TunIf tunif("tun0");
     if (!tunif.alloc()) {

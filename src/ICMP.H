@@ -14,7 +14,7 @@ struct ICMP_Header_t {
 
 class ICMP {
     public:
-        static int icmp_input(NetDev &netdev, IP_Header_t *iph, uint8_t *ip_payload, uint16_t ip_payload_size);
+        static int icmp_input(NetDev &netdev, IP_Header *iph, uint8_t *ip_payload, uint16_t ip_payload_size);
 };
 
 #endif
