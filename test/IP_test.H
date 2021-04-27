@@ -42,14 +42,6 @@ TEST(IP, validate_header) {
     delete[] badHeader;
 }
 
-TEST(IP, validate_header_checksum) {
-    ASSERT_EQ(0, IP::validate_header_checksum((uint8_t *)net_ip_frame_raw, 20));
-    uint8_t *zeroBuf = new uint8_t[20];
-    memset((uint8_t *) zeroBuf, 0, 20);
-    ASSERT_NE(1, IP::validate_header_checksum(zeroBuf, 20));
-    delete[] zeroBuf;
-}
-
 TEST(IP, getPayload) {
     uint8_t *payload = IP::getPayload((uint8_t *) net_ip_frame_raw, sizeof(net_ip_frame_raw));
     ASSERT_EQ(0x08, *payload);

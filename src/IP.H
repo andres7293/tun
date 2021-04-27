@@ -35,7 +35,6 @@ class IP {
         static int ip_input(NetDev &netdev, uint8_t *p, uint16_t size);
         static int validate_ip_packet_size(uint16_t ip_packet_size);
         static int validate_header(uint8_t *ip_packet, uint16_t size);
-        static uint16_t validate_header_checksum(uint8_t *ip_packet, uint16_t size);
         static uint8_t* getPayload(uint8_t *ip_packet, uint16_t size);
         static uint16_t getPayloadSize(uint8_t *ip_packet, uint16_t size);
 

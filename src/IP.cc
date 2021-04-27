@@ -33,28 +33,13 @@ int IP::validate_header(uint8_t *ip_packet, uint16_t size) {
     IP_Header *iph = (IP_Header *) ip_packet;
     if (iph->getHeaderLenInBytes() != IP_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -2;
-    if (IP::validate_header_checksum(ip_packet, size) != 0)
+    //validate checksum header
+    if (utils::checksum((void *) ip_packet, iph->getHeaderLenInBytes(), 0) != 0)
         return -3;
     //checks if total_len specified in header match with the current packet size
     if (size != utils::netToHostShort(iph->total_len))
         return -4;
     return 0;
-}
-
-/*The header must be validated in Network Endian Order (Big Endian)*/
-uint16_t IP::validate_header_checksum(uint8_t *header_frame, uint16_t size) {
-    if (size < IP_Header::MIN_IP_HEADER_SIZE_BYTES) {
-        return 1;
-    }
-    uint8_t num_blocks_of_16bits = IP_Header::MIN_IP_HEADER_SIZE_BYTES / 2;
-    uint32_t u32_sum = 0;
-    uint16_t *p = (uint16_t *) header_frame;
-    for (uint32_t i = 0; i < num_blocks_of_16bits; i++) {
-        u32_sum += p[i];
-    }
-    uint16_t carry = ((u32_sum & 0x000f0000) >> 16);
-    uint16_t u16_sum = (u32_sum & 0x0000ffff);
-    return ~(u16_sum + carry);
 }
 
 uint8_t* IP::getPayload(uint8_t *ip_packet, uint16_t size) {
