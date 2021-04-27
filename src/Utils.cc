@@ -1,6 +1,6 @@
 #include "Utils.H"
 
-uint32_t utils::sum_every_16bits(void *addr, int count) {
+uint32_t utils::sum_every_16bits(void *addr, uint16_t count) {
     /*
         https://tools.ietf.org/html/rfc1071
      * */
@@ -17,7 +17,7 @@ uint32_t utils::sum_every_16bits(void *addr, int count) {
     return sum;
 }
 
-uint16_t utils::checksum(void *addr, int count, int start_sum) {
+uint16_t utils::checksum(void *addr, uint16_t count, uint32_t start_sum) {
     /*
         https://tools.ietf.org/html/rfc1071
      * */
