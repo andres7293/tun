@@ -8,11 +8,12 @@ all: test
 
 test:	test.o
 	make -C ../src IP.o
+	make -C ../src ICMP.o
 	make -C ../src IP_Header.o
 	make -C ../src NetDev.o
 	make -C ../src TunIf.o
 	make -C ../src Utils.o
-	${CCXX} ${CXXFLAGS} $^ ../src/IP.o  ../src/IP_Header.o ../src/TunIf.o ../src/NetDev.o ../src/Utils.o -o $@ ${LIBS}
+	${CCXX} ${CXXFLAGS} $^ ../src/IP.o ../src/ICMP.o ../src/IP_Header.o ../src/TunIf.o ../src/NetDev.o ../src/Utils.o -o $@ ${LIBS}
 
 %.o:	%.cc
 	${CCXX} ${CXXFLAGS} -c $^ -o $@
