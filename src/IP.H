@@ -28,7 +28,7 @@ class IP_Header {
         uint8_t getFragmentOffset();
 
         static const int MIN_IP_HEADER_SIZE_BYTES = 20;
-};
+}__attribute__((packed));
 
 class IP {
     public:
