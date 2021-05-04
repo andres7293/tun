@@ -22,8 +22,8 @@ struct ICMP_EchoRequest_t {
 
 class ICMP {
     public:
-        static int icmp_input(NetDev &netdev, IP_Header *iph, uint8_t *ip_payload, uint16_t ip_payload_size);
-        static int icmp_echo_request(NetDev &netdev, IP_Header *iph, uint8_t *ip_payload, uint16_t ip_payload_size);
+        static int icmp_input(NetDev &netdev, IP_Packet &packet);
+        static int icmp_echo_request(NetDev &netdev, IP_Packet &packet);
 };
 
 ostream& operator << (ostream& os, ICMP_EchoRequest_t &h);

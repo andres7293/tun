@@ -11,12 +11,15 @@ NetDev netdev(tun);
 
 TEST(IP, ip_input) {
     //TODO test ipv6 version
-    uint8_t *badHeader = new uint8_t[20];
-    memset((uint8_t *) badHeader, 0, 20);
-    ASSERT_EQ(-1, IP::ip_input(netdev, badHeader, 0));
-    ASSERT_EQ(-2, IP::ip_input(netdev, badHeader, 20));
-    ASSERT_EQ(0, IP::ip_input(netdev, (uint8_t *)net_ip_frame_raw, sizeof(net_ip_frame_raw)));
-    delete[] badHeader;
+    IP_Packet badHeader(new uint8_t[20], 20);
+    IP_Packet zeroSizePacket(nullptr, 0);
+    IP_Packet goodPacket((uint8_t *)net_ip_frame_raw, sizeof(net_ip_frame_raw));
+
+    memset((uint8_t *) badHeader.get(), 0, 20);
+    ASSERT_EQ(-1, IP::ip_input(netdev, zeroSizePacket));
+    ASSERT_EQ(-2, IP::ip_input(netdev, badHeader));
+    ASSERT_EQ(0, IP::ip_input(netdev, goodPacket));
+    delete[] badHeader.get();
 }
 
 TEST(IP, validate_ip_packet_size) {
@@ -28,28 +31,33 @@ TEST(IP, validate_ip_packet_size) {
 }
 
 TEST(IP, validate_header) {
-    uint8_t *badHeader = new uint8_t[20];
-    memset((uint8_t *) badHeader, 0, 20);
-    ASSERT_EQ(-1, IP::validate_header(badHeader, 0));
-    ASSERT_EQ(-2, IP::validate_header(badHeader, 20));
+    uint8_t *zero = new uint8_t[21];
+    memset((uint8_t *) zero, 0, 21);
+
+    IP_Packet badHeader(zero, 21);
+    IP_Packet zeroSizePacket(nullptr, 0);
+    IP_Packet goodPacket((uint8_t *)net_ip_frame_raw, sizeof(net_ip_frame_raw));
+    IP_Packet tooLargePacket((uint8_t *)net_ip_frame_raw, 1024);
+
+    ASSERT_EQ(-1, IP::validate_header(zeroSizePacket));
+    ASSERT_EQ(-2, IP::validate_header(badHeader));
     //test bad checksum
-    badHeader[0] = 0x45;
-    ASSERT_EQ(-3, IP::validate_header(badHeader, 20));
+    badHeader.get()[0] = 0x45;
+    ASSERT_EQ(-3, IP::validate_header(badHeader));
     //test if total_len of header doesnt match with the current packet size
-    ASSERT_EQ(-4, IP::validate_header((uint8_t *)net_ip_frame_raw, 1024));
+    ASSERT_EQ(-4, IP::validate_header(tooLargePacket));
     //good case
-    ASSERT_EQ(0, IP::validate_header((uint8_t *)net_ip_frame_raw, sizeof(net_ip_frame_raw)));
-    delete[] badHeader;
+    ASSERT_EQ(0, IP::validate_header(goodPacket));
+    delete[] zero;
 }
 
 TEST(IP, getPayload) {
-    uint8_t *payload = IP::getPayload((uint8_t *) net_ip_frame_raw, sizeof(net_ip_frame_raw));
-    ASSERT_EQ(0x08, *payload);
+    IP_Packet packet((uint8_t *) net_ip_frame_raw, sizeof(net_ip_frame_raw));
+    IP_Payload payload = IP::getPayload(packet);
+    ASSERT_EQ(0x08, payload.get()[0]);
+    ASSERT_EQ(64, payload.getSize());
 }
 
-TEST(IP, getPayloadSize) {
-    ASSERT_EQ(64, IP::getPayloadSize((uint8_t *) net_ip_frame_raw, sizeof(net_ip_frame_raw)));
-}
 
 TEST(IP_Header, getVersion) {
     IP_Header iph;

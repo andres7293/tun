@@ -1,17 +1,16 @@
 #include "ICMP.H"
 
-int ICMP::icmp_input(NetDev &netdev, IP_Header *iph, uint8_t *ip_payload, uint16_t ip_payload_size) {
-    ICMP_Header_t *icmph = (ICMP_Header_t *) ip_payload;
+int ICMP::icmp_input(NetDev &netdev, IP_Packet &packet) {
+    ICMP_Header_t *icmph = (ICMP_Header_t *) packet.get();
 
     //ping request
     if (icmph->type == 0x08 && icmph->code == 0) {
-        ICMP::icmp_echo_request(netdev, iph, ip_payload, ip_payload_size);
     }
     return 0;
 }
 
-int ICMP::icmp_echo_request(NetDev &netdev, IP_Header *iph, uint8_t *ip_payload, uint16_t ip_payload_size) {
-    ICMP_EchoRequest_t *icmph = (ICMP_EchoRequest_t *) ip_payload;
+int ICMP::icmp_echo_request(NetDev &netdev, IP_Packet &packet) {
+    ICMP_EchoRequest_t *icmph = (ICMP_EchoRequest_t *) packet.get();
     cout << *icmph << endl;
     return 0;
 }

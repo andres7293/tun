@@ -1,6 +1,7 @@
 #ifndef __IPV4__H__
 #define __IPV4__H__
 
+#include <bits/stdint-uintn.h>
 #include <iostream>
 
 #include "Utils.H"
@@ -30,13 +31,27 @@ class IP_Header {
         static const int MIN_IP_HEADER_SIZE_BYTES = 20;
 }__attribute__((packed));
 
+class IP_Packet {
+    public:
+        IP_Packet(uint8_t *p, uint16_t size): p(p), size(size) {}
+        uint8_t* get() { return this->p; }
+        uint16_t getSize() { return this->size; }
+    private:
+        uint8_t *p;
+        uint16_t size;
+};
+
+class IP_Payload: public IP_Packet {
+    public:
+        IP_Payload(uint8_t *p, uint16_t size): IP_Packet(p, size) {}
+};
+
 class IP {
     public:
-        static int ip_input(NetDev &netdev, uint8_t *p, uint16_t size);
+        static int ip_input(NetDev &netdev, IP_Packet &packet);
         static int validate_ip_packet_size(uint16_t ip_packet_size);
-        static int validate_header(uint8_t *ip_packet, uint16_t size);
-        static uint8_t* getPayload(uint8_t *ip_packet, uint16_t size);
-        static uint16_t getPayloadSize(uint8_t *ip_packet, uint16_t size);
+        static int validate_header(IP_Packet &packet);
+        static IP_Payload getPayload(IP_Packet &packet);
 
         static const int MAX_IP_PACKET_SIZE = 65535;
         static const int MIN_IP_PACKET_SIZE = 20;

@@ -26,7 +26,8 @@ int main(void) {
     while (1) {
         NetBuf nbuf(1024);
         ssize_t bytesRead = netdev.read(nbuf.getBuf(), nbuf.getSize());
-        IP::ip_input(netdev, nbuf.getBuf(), (uint16_t) bytesRead);
+        IP_Packet packet(nbuf.getBuf(), bytesRead);
+        IP::ip_input(netdev, packet);
     }
     tunif.dealloc();
     return 0;

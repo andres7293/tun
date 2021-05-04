@@ -2,18 +2,18 @@
 #include "Utils.H"
 #include "ICMP.H"
 
-int IP::ip_input(NetDev &netdev, uint8_t *ip_packet, uint16_t size) {
-    if (IP::validate_ip_packet_size(size) != 0)
+int IP::ip_input(NetDev &netdev, IP_Packet &packet) {
+    if (IP::validate_ip_packet_size(packet.getSize()) != 0)
         return -1;
-    if (IP::validate_header(ip_packet, size) != 0)
+    if (IP::validate_header(packet) != 0)
         return -2;
-    IP_Header *iph = (IP_Header *) ip_packet;
+    IP_Header *iph = (IP_Header *) packet.get();
     if (iph->getVersion() != 4)
         return -3;
 
     switch (iph->protocol) {
         case IP::ICMPV4_PROTOCOL:
-            ICMP::icmp_input(netdev, iph, IP::getPayload(ip_packet, size), IP::getPayloadSize(ip_packet, size));
+            ICMP::icmp_input(netdev, packet);
             break;
     }
     return 0;
@@ -27,29 +27,24 @@ int IP::validate_ip_packet_size(uint16_t ip_packet_size) {
     return 0;
 }
 
-int IP::validate_header(uint8_t *ip_packet, uint16_t size) {
-    if (size < IP_Header::MIN_IP_HEADER_SIZE_BYTES)
+int IP::validate_header(IP_Packet &packet) {
+    if (packet.getSize() < IP_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -1;
-    IP_Header *iph = (IP_Header *) ip_packet;
+    IP_Header *iph = (IP_Header *) packet.get();
     if (iph->getHeaderLenInBytes() != IP_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -2;
     //validate checksum header
-    if (utils::checksum((void *) ip_packet, iph->getHeaderLenInBytes(), 0) != 0)
+    if (utils::checksum((void *) packet.get(), iph->getHeaderLenInBytes(), 0) != 0)
         return -3;
     //checks if total_len specified in header match with the current packet size
-    if (size != utils::netToHostShort(iph->total_len))
+    if (packet.getSize() != utils::netToHostShort(iph->total_len))
         return -4;
     return 0;
 }
 
-uint8_t* IP::getPayload(uint8_t *ip_packet, uint16_t size) {
-    uint8_t *payload = (uint8_t *) ip_packet + sizeof(IP_Header);
-    return payload;
-}
-
-uint16_t IP::getPayloadSize(uint8_t *ip_packet, uint16_t size) {
-    IP_Header *iph = (IP_Header *) ip_packet;
-    return utils::hostToNetShort(iph->total_len) - iph->getHeaderLenInBytes();
+IP_Payload IP::getPayload(IP_Packet &packet) {
+    uint16_t hsize = sizeof(IP_Header);
+    return IP_Payload((uint8_t *) packet.get() + hsize, packet.getSize() - hsize);
 }
 
 uint8_t IP_Header::getVersion() {
