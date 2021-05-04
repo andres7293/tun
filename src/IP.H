@@ -49,6 +49,7 @@ class IP_Payload: public IP_Packet {
 class IP {
     public:
         static int ip_input(NetDev &netdev, IP_Packet &packet);
+        static int ip_output(NetDev &netdev, IP_Packet &packet);
         static int validate_ip_packet_size(uint16_t ip_packet_size);
         static int validate_header(IP_Packet &packet);
         static IP_Payload getPayload(IP_Packet &packet);

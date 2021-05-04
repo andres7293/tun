@@ -24,6 +24,8 @@ class ICMP {
     public:
         static int icmp_input(NetDev &netdev, IP_Packet &packet);
         static int icmp_echo_request(NetDev &netdev, IP_Packet &packet);
+
+        static uint16_t icmp_header_checksum(IP_Payload &payload);
 };
 
 ostream& operator << (ostream& os, ICMP_EchoRequest_t &h);

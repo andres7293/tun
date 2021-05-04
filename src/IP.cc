@@ -19,6 +19,19 @@ int IP::ip_input(NetDev &netdev, IP_Packet &packet) {
     return 0;
 }
 
+int IP::ip_output(NetDev &netdev, IP_Packet &packet) {
+    IP_Header *iph = (IP_Header *) packet.get();
+    //reverse src and dst
+    uint32_t _src = iph->src_addr;
+    uint32_t _dst = iph->dst_addr;
+    iph->src_addr = _dst;
+    iph->dst_addr = _src;
+    //calculate ip header checksum
+    iph->header_checksum = 0;
+    iph->header_checksum = utils::checksum((void *) iph, sizeof(IP_Header), 0);
+    return netdev.write(packet.get(), packet.getSize());
+}
+
 int IP::validate_ip_packet_size(uint16_t ip_packet_size) {
     if (ip_packet_size < IP_Header::MIN_IP_HEADER_SIZE_BYTES)
         return -1;
