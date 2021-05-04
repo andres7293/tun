@@ -13,7 +13,7 @@ int IP::ip_input(NetDev &netdev, uint8_t *ip_packet, uint16_t size) {
 
     switch (iph->protocol) {
         case IP::ICMPV4_PROTOCOL:
-            //ICMP::icmp_input(netdev, h, IP::getPayload(ip_packet, size), IP::getPayloadSize(ip_packet, size));
+            ICMP::icmp_input(netdev, iph, IP::getPayload(ip_packet, size), IP::getPayloadSize(ip_packet, size));
             break;
     }
     return 0;
