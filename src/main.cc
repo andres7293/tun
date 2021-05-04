@@ -20,6 +20,8 @@ int main(void) {
         cout << "Error opening /dev/tun" << endl;
         return -1;
     }
+    system("ip link set tun0 up");
+    system("ip addr add 10.0.0.1/24 dev tun0");
     NetDev netdev(tunif);
     while (1) {
         NetBuf nbuf(1024);
