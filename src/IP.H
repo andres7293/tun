@@ -41,8 +41,10 @@ class IP_Packet {
         uint16_t size;
 };
 
+class IP;
 class IP_Payload: public IP_Packet {
-    public:
+    friend IP;
+    private:
         IP_Payload(uint8_t *p, uint16_t size): IP_Packet(p, size) {}
 };
 
