@@ -1,3 +1,4 @@
+#include <bits/stdint-uintn.h>
 #include <gtest/gtest.h>
 #include "../src/IP.H"
 #include "../src/NetDev.H"
@@ -30,37 +31,51 @@ TEST(IP, ip_input) {
     delete[] badHeader.get();
 }
 
-TEST(IP, validate_ip_packet_size) {
+TEST(IP, validateZeroSizePacket) {
     ASSERT_EQ(-1, IP::validate_ip_packet_size(0));
+}
+
+TEST(IP, validatePacketLesserThanHeaderSize) {
     ASSERT_EQ(-1, IP::validate_ip_packet_size(19));
-    ASSERT_EQ(0, IP::validate_ip_packet_size(65535));
-    ASSERT_EQ(0, IP::validate_ip_packet_size(1024));
+}
+
+TEST(IP, validateHeaderSizePacket) {
     ASSERT_EQ(0, IP::validate_ip_packet_size(20));
 }
 
-TEST(IP, validate_header) {
+TEST(IP, validateValidHeader) {
     vector<uint8_t> v = valid_frame;
-    uint8_t *zero = new uint8_t[21];
-    memset((uint8_t *) zero, 0, 21);
-
-    IP_Packet badHeader(zero, 21);
-    IP_Packet zeroSizePacket(nullptr, 0);
     IP_Packet goodPacket(v.data(), v.size());
-    IP_Packet tooLargePacket(v.data(), 1024);
-
-    ASSERT_EQ(-1, IP::validate_header(zeroSizePacket));
-    ASSERT_EQ(-2, IP::validate_header(badHeader));
-    //test bad checksum
-    badHeader.get()[0] = 0x45;
-    ASSERT_EQ(-3, IP::validate_header(badHeader));
-    //test if total_len of header doesnt match with the current packet size
-    ASSERT_EQ(-4, IP::validate_header(tooLargePacket));
-    //good case
     ASSERT_EQ(0, IP::validate_header(goodPacket));
-    delete[] zero;
 }
 
-TEST(IP, getPayload) {
+TEST(IP, validateHeaderOfZeroSizePacket) {
+    vector<uint8_t> zero;
+    IP_Packet zeroSizePacket(zero.data(), 0);
+    ASSERT_EQ(-1, IP::validate_header(zeroSizePacket));
+}
+
+TEST(IP, validateHeaderWithBadHeaderLen) {
+    vector<uint8_t> v = valid_frame;
+    IP_Packet badHeader(v.data(), v.size());
+    v[0] = 0x46;
+    ASSERT_EQ(-2, IP::validate_header(badHeader));
+}
+
+TEST(IP, validateHeaderWithBadChecksum) {
+    vector<uint8_t> v = valid_frame;
+    IP_Packet badHeader(v.data(), v.size());
+    v[1] = 1;
+    ASSERT_EQ(-3, IP::validate_header(badHeader));
+}
+
+TEST(IP, validatePacketThatDoesntMatchWithSizeInHeader) {
+    vector<uint8_t> v = valid_frame;
+    IP_Packet tooLargePacket(v.data(), 1024);
+    ASSERT_EQ(-4, IP::validate_header(tooLargePacket));
+}
+
+TEST(IP, getValidPayload) {
     vector<uint8_t> v = valid_frame;
     IP_Packet packet(v.data(), v.size());
     IP_Payload payload = IP::getPayload(packet);
