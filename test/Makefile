@@ -18,4 +18,4 @@ test:	test.o
 	${CCXX} ${CXXFLAGS} -c $^ -o $@
 
 clean:
-	rm -f *.o *.out IP_test
+	rm -f *.o *.out test
