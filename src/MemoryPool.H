@@ -4,19 +4,6 @@
 #include <bits/stdint-uintn.h>
 #include <stdint.h>
 
-template <int BLOCKSIZE>
-class MemoryBlock {
-    public:
-        uint8_t* getBuf() {
-            return this->block;
-        }
-        int getSize() {
-            return sizeof(uint8_t) * BLOCKSIZE;
-        }
-    private:
-        uint8_t block[BLOCKSIZE];
-};
-
 template <typename T, int NUMBLOCKS>
 class MemoryPool {
     public:
@@ -54,10 +41,10 @@ class MemoryPool {
             return NUMBLOCKS;
         }
         int getTotalSize() {
-            return this->pool[0].getSize() * NUMBLOCKS;
+            return sizeof(T) * NUMBLOCKS;
         }
         int getBlockSize() {
-            return this->pool[0].getSize();
+            return sizeof(T);
         }
         int getNumBlocksFree() {
             return this->numBlocksFree;
