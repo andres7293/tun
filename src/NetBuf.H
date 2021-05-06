@@ -3,6 +3,7 @@
 
 #include <bits/stdint-uintn.h>
 #include <stdint.h>
+#include <string.h>
 
 class NetBuf {
     public:
