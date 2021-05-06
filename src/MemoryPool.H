@@ -40,12 +40,15 @@ class MemoryPool {
                 return -1;
             for (unsigned int i = 0; i < NUMBLOCKS; i++) {
                 if (block == &this->pool[i]) {
+                    if (this->freeList[i] == 0) {
+                        return -2;
+                    }
                     this->freeList[i] = 0;
                     this->numBlocksFree++;
                     return 0;
                 }
             }
-            return -2;
+            return -3;
         }
         int getNumBlocks() {
             return NUMBLOCKS;
