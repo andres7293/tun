@@ -17,28 +17,31 @@ class MemoryBlock {
         uint8_t block[BLOCKSIZE];
 };
 
-template <int BLOCKSIZE, int NUMBLOCKS>
+template <typename T, int NUMBLOCKS>
 class MemoryPool {
     public:
         MemoryPool() {
+            this->numBlocksFree = NUMBLOCKS;
             for (unsigned int i = 0; i < NUMBLOCKS; i++)
                 this->freeList[i] = 0;
         }
-        MemoryBlock<BLOCKSIZE>* alloc() {
+        T* alloc() {
             for (unsigned int i = 0; i < NUMBLOCKS; i++) {
                 if (this->freeList[i] == 0) {
                     this->freeList[i] = 1;
+                    this->numBlocksFree--;
                     return &this->pool[i];
                 }
             }
             return nullptr;
         }
-        int free(MemoryBlock<BLOCKSIZE>* block) {
+        int free(T* block) {
             if (block == nullptr)
                 return -1;
             for (unsigned int i = 0; i < NUMBLOCKS; i++) {
                 if (block == &this->pool[i]) {
                     this->freeList[i] = 0;
+                    this->numBlocksFree++;
                     return 0;
                 }
             }
@@ -48,14 +51,30 @@ class MemoryPool {
             return NUMBLOCKS;
         }
         int getTotalSize() {
-            return this->pool[0].getTotalSize * NUMBLOCKS;
+            return this->pool[0].getSize() * NUMBLOCKS;
         }
         int getBlockSize() {
-            return BLOCKSIZE;
+            return this->pool[0].getSize();
+        }
+        int getNumBlocksFree() {
+            return this->numBlocksFree;
         }
     private:
-        MemoryBlock<BLOCKSIZE> pool[NUMBLOCKS];
+        T pool[NUMBLOCKS];
         unsigned int freeList[NUMBLOCKS];
+        int numBlocksFree;
 };
+
+template <typename T, int NUMBLOCKS>
+ostream& operator << (ostream& os, MemoryPool<T, NUMBLOCKS> &p) {
+    cout << "MemoryPool{"
+        << "numBlocks=" 
+        << p.getNumBlocks()
+        << ",blockSize=" << p.getBlockSize()
+        << ",totalSize=" << p.getTotalSize()
+        << ",numBlocksFree=" << p.getNumBlocksFree()
+        << "}";
+    return os;
+}
 
 #endif
