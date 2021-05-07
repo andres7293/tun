@@ -45,31 +45,11 @@ class StaticNetBufException: public exception {
 
 class StaticNetBuf: public INetBuf {
     public:
-        StaticNetBuf(MemPool *pool): pool(pool), p(nullptr) {
-            this->p = this->pool->alloc();
-            if (this->p == nullptr) {
-                throw StaticNetBufException("Can't alloc more memory in pool");
-            }
-        };
-        StaticNetBuf(StaticNetBuf &n) {
-            this->pool = n.pool;
-            this->p = n.pool->alloc();
-            if (this->p == nullptr) {
-                throw StaticNetBufException("Can't alloc more memory in pool");
-            }
-            memcpy((uint8_t *) this->p, (uint8_t *) n.getBuf(), n.getSize());
-        }
-        ~StaticNetBuf() {
-            if (this->p != nullptr) {
-                this->pool->free(this->p);
-            }
-        }
-        uint8_t* getBuf() {
-            return (uint8_t *)this->p;
-        }
-        uint16_t getSize() {
-            return this->pool->getBlockSize();
-        }
+        StaticNetBuf(MemPool *pool);
+        StaticNetBuf(StaticNetBuf &n);
+        ~StaticNetBuf();
+        uint8_t* getBuf();
+        uint16_t getSize();
     private:
         MemPool *pool;
         MemBlock *p;
