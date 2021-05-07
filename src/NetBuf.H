@@ -4,6 +4,7 @@
 #include <bits/stdint-uintn.h>
 #include <stdint.h>
 #include <exception>
+#include <string.h>
 #include "MemoryPool.H"
 #include "Config.H"
 
@@ -50,6 +51,14 @@ class StaticNetBuf: public INetBuf {
                 throw StaticNetBufException("Can't alloc more memory in pool");
             }
         };
+        StaticNetBuf(StaticNetBuf &n) {
+            this->pool = n.pool;
+            this->p = n.pool->alloc();
+            if (this->p == nullptr) {
+                throw StaticNetBufException("Can't alloc more memory in pool");
+            }
+            memcpy((uint8_t *) this->p, (uint8_t *) n.getBuf(), n.getSize());
+        }
         ~StaticNetBuf() {
             if (this->p != nullptr) {
                 this->pool->free(this->p);
