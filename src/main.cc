@@ -17,7 +17,7 @@ using namespace std;
 int main(void) {
     TunIf tunif("tun0");
     if (!tunif.alloc()) {
-        cout << "Error opening /dev/tun" << endl;
+        cout << "Error opening /dev/tun, errno=" << tunif.getErrno() << endl;
         return -1;
     }
     system("ip link set tun0 up");
