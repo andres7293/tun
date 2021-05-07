@@ -3,6 +3,9 @@
 
 #include <bits/stdint-uintn.h>
 #include <stdint.h>
+#include <iostream>
+
+using namespace std;
 
 template <typename T, int NUMBLOCKS>
 class MemoryPool {
