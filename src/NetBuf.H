@@ -3,7 +3,14 @@
 
 #include <stdint.h>
 
-class NetBuf {
+class INetBuf {
+    public:
+        virtual ~INetBuf() {};
+        virtual uint8_t* getBuf() = 0;
+        virtual uint16_t getSize() = 0;
+};
+
+class NetBuf: public INetBuf {
     public:
         NetBuf(uint16_t size);
         ~NetBuf();
