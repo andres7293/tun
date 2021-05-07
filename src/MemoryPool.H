@@ -15,6 +15,14 @@ class MemoryPool {
             for (unsigned int i = 0; i < NUMBLOCKS; i++)
                 this->freeList[i] = 0;
         }
+        bool canAlloc() {
+            if (this->numBlocksFree > 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
         T* alloc() {
             for (unsigned int i = 0; i < NUMBLOCKS; i++) {
                 if (this->freeList[i] == 0) {
