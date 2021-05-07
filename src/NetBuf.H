@@ -32,10 +32,23 @@ class NetBuf: public INetBuf {
         NetBuf& operator = (const NetBuf &&n) = delete;
 };
 
+class StaticNetBufException: public exception {
+    public:
+        StaticNetBufException(string msg): msg(msg) { }
+        virtual const char* what() {
+            return this->msg.c_str();
+        }
+    private:
+        string msg;
+};
+
 class StaticNetBuf: public INetBuf {
     public:
         StaticNetBuf(MemPool *pool): pool(pool), p(nullptr) {
             this->p = this->pool->alloc();
+            if (this->p == nullptr) {
+                throw StaticNetBufException("Can't alloc more memory in pool");
+            }
         };
         ~StaticNetBuf() {
             if (this->p != nullptr) {
