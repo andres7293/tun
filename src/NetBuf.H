@@ -33,26 +33,18 @@ class NetBuf: public INetBuf {
         NetBuf& operator = (const NetBuf &&n) = delete;
 };
 
-class StaticNetBufException: public exception {
-    public:
-        StaticNetBufException(string msg): msg(msg) { }
-        virtual const char* what() {
-            return this->msg.c_str();
-        }
-    private:
-        string msg;
-};
-
+template <uint16_t N>
 class StaticNetBuf: public INetBuf {
     public:
-        StaticNetBuf(MemPool *pool);
-        StaticNetBuf(StaticNetBuf &n);
-        ~StaticNetBuf();
-        uint8_t* getBuf();
-        uint16_t getSize();
+        StaticNetBuf() {}
+        ~StaticNetBuf() {}
+        StaticNetBuf(StaticNetBuf &n) {
+            memcpy((uint8_t *) this->p, (uint8_t *) n.getBuf(), N);
+        }
+        uint8_t* getBuf() { return this->p; };
+        uint16_t getSize() { return N; }
     private:
-        MemPool *pool;
-        MemBlock *p;
+        uint8_t p[N];
 };
 
 #endif
