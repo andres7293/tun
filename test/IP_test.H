@@ -17,18 +17,22 @@ const vector<uint8_t> valid_frame = {0x45, 0x00, 0x00, 0x54, 0xf2, 0xc8, 0x40, 0
 TunIfMock tun("dummytun");
 NetDevMock netdev(tun);
 
-TEST(IP, ip_input) {
+TEST(IP, ip_input_validPacket) {
     vector<uint8_t> v = valid_frame;
-    //TODO test ipv6 version
-    IP_Packet badHeader(new uint8_t[20], 20);
-    IP_Packet zeroSizePacket(nullptr, 0);
     IP_Packet goodPacket(v.data(), v.size());
-
-    memset((uint8_t *) badHeader.get(), 0, 20);
-    ASSERT_EQ(-1, IP::ip_input(netdev, zeroSizePacket));
-    ASSERT_EQ(-2, IP::ip_input(netdev, badHeader));
     ASSERT_EQ(0, IP::ip_input(netdev, goodPacket));
-    delete[] badHeader.get();
+}
+
+TEST(IP, ip_input_badHeader) {
+    vector<uint8_t> zero(20);
+    IP_Packet badHeader(zero.data(), zero.size());
+    ASSERT_EQ(-2, IP::ip_input(netdev, badHeader));
+}
+
+TEST(IP, ip_input_zeroSizePacket) {
+    vector<uint8_t> zero(0);
+    IP_Packet zeroSizePacket(zero.data(), zero.size());
+    ASSERT_EQ(-1, IP::ip_input(netdev, zeroSizePacket));
 }
 
 TEST(IP, validateZeroSizePacket) {
