@@ -57,7 +57,7 @@ int IP::validate_header(IP_Packet &packet) {
 
 IP_Payload IP::getPayload(IP_Packet &packet) {
     uint16_t hsize = sizeof(IP_Header);
-    return IP_Payload((uint8_t *) packet.get() + hsize, packet.getSize() - hsize);
+    return IP_Payload((uint8_t *) packet.get() + hsize, packet.getSize() - hsize, packet.getNetBuf());
 }
 
 uint8_t IP_Header::getVersion() {

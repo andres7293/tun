@@ -6,6 +6,7 @@
 
 #include "Utils.H"
 #include "NetDev.H"
+#include "NetBuf.H"
 
 using namespace std;
 
@@ -33,19 +34,22 @@ class IP_Header {
 
 class IP_Packet {
     public:
-        IP_Packet(uint8_t *p, uint16_t size): p(p), size(size) {}
+        IP_Packet(INetBuf *netbuf): p(netbuf->getBuf()), size(netbuf->getSize()), netbuf(netbuf) {}
+        IP_Packet(uint8_t *p, uint16_t size, INetBuf *netbuf): p(p), size(size), netbuf(netbuf) {}
         uint8_t* get() { return this->p; }
         uint16_t getSize() { return this->size; }
+        INetBuf *getNetBuf() { return this->netbuf; }
     private:
         uint8_t *p;
         uint16_t size;
+        INetBuf *netbuf;
 };
 
 class IP;
 class IP_Payload: public IP_Packet {
     friend IP;
     private:
-        IP_Payload(uint8_t *p, uint16_t size): IP_Packet(p, size) {}
+        IP_Payload(uint8_t *p, uint16_t size, INetBuf *netbuf): IP_Packet(p, size, netbuf) {}
 };
 
 class IP {
