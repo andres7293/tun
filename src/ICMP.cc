@@ -12,6 +12,9 @@ int ICMP::icmp_input(NetDev &netdev, IP_Packet &packet) {
 int ICMP::icmp_echo_request(NetDev &netdev, IP_Packet &packet) {
     IP_Payload payload = IP::getPayload(packet);
     ICMP_EchoRequest_t *icmph = (ICMP_EchoRequest_t *) payload.get();
+    if (ICMP::validate_icmp_header_checksum(payload) != 0) {
+        return -1;
+    }
     //create echo reply reutilizing same input packet
     icmph->type = 0x00;
     icmph->code = 0;

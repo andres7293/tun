@@ -47,8 +47,7 @@ class IP_Packet {
 
 class IP;
 class IP_Payload: public IP_Packet {
-    friend IP;
-    private:
+    public:
         IP_Payload(uint8_t *p, uint16_t size, INetBuf *netbuf): IP_Packet(p, size, netbuf) {}
 };
 
