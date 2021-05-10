@@ -26,6 +26,7 @@ class ICMP {
         static int icmp_echo_request(NetDev &netdev, IP_Packet &packet);
 
         static uint16_t icmp_header_checksum(IP_Payload &payload);
+        static uint16_t validate_icmp_header_checksum(IP_Payload &payload);
 };
 
 ostream& operator << (ostream& os, ICMP_EchoRequest_t &h);

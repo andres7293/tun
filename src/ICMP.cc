@@ -28,6 +28,11 @@ uint16_t ICMP::icmp_header_checksum(IP_Payload &payload) {
     return utils::checksum((void *) h, payload.getSize(), 0);
 }
 
+uint16_t ICMP::validate_icmp_header_checksum(IP_Payload &payload) {
+    ICMP_Header_t *h = (ICMP_Header_t *) payload.get();
+    return utils::checksum((void *) h, payload.getSize(), 0);
+}
+
 ostream& operator << (ostream& os, ICMP_EchoRequest_t &h) {
     os << "ICMP_EchoRequest_t{"
         << "type=0x" << hex << (int) h.type << dec
