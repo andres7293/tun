@@ -13,13 +13,14 @@ class INetBuf {
         virtual ~INetBuf() {};
         virtual uint8_t* getBuf() = 0;
         virtual uint16_t getSize() = 0;
+        uint16_t copy(uint8_t *data, uint16_t dsize);
 };
 
 class NetBuf: public INetBuf {
     public:
         NetBuf(uint16_t size);
         ~NetBuf();
-        NetBuf(const NetBuf &n);
+        NetBuf(NetBuf &n);
         uint8_t* getBuf();
         uint16_t getSize();
     private:
