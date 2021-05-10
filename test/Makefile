@@ -12,7 +12,8 @@ test:	test.o
 	make -C ../src NetDev.o
 	make -C ../src TunIf.o
 	make -C ../src Utils.o
-	${CCXX} ${CXXFLAGS} $^ ../src/IP.o ../src/ICMP.o ../src/TunIf.o ../src/NetDev.o ../src/Utils.o -o $@ ${LIBS}
+	make -C ../src NetBuf.o
+	${CCXX} ${CXXFLAGS} $^ ../src/IP.o ../src/ICMP.o ../src/TunIf.o ../src/NetDev.o ../src/Utils.o ../src/NetBuf.o -o $@ ${LIBS}
 
 %.o:	%.cc
 	${CCXX} ${CXXFLAGS} -c $^ -o $@

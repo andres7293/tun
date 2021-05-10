@@ -11,6 +11,12 @@
 
 using namespace std;
 
+NetBuf from_vector_to_netbuf(vector<uint8_t> v) {
+    NetBuf nb(v.size());
+    nb.copy(v.data(), v.size());
+    return nb;
+}
+
 /*network ip packet*/
 const vector<uint8_t> valid_frame = {0x45, 0x00, 0x00, 0x54, 0xf2, 0xc8, 0x40, 0x00, 0x40, 0x01, 0x49, 0xde, 0x7f, 0x00, 0x00, 0x01, 0x7f, 0x00, 0x00, 0x01, 0x08, 0x00, 0x4f, 0xff, 0x61, 0xfa, 0x00, 0x01, 0x8f, 0xe1, 0x7f, 0x60, 0x00, 0x00, 0x00, 0x00, 0x76, 0xf0, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37};
 
@@ -18,20 +24,22 @@ TunIfMock tun("dummytun");
 NetDevMock netdev(tun);
 
 TEST(IP, ip_input_validPacket) {
-    vector<uint8_t> v = valid_frame;
-    IP_Packet goodPacket(v.data(), v.size());
+    NetBuf nb = from_vector_to_netbuf(valid_frame);
+    IP_Packet goodPacket(&nb);
     ASSERT_EQ(0, IP::ip_input(netdev, goodPacket));
 }
 
 TEST(IP, ip_input_badHeader) {
     vector<uint8_t> zero(20);
-    IP_Packet badHeader(zero.data(), zero.size());
+    NetBuf nb = from_vector_to_netbuf(zero);
+    IP_Packet badHeader(&nb);
     ASSERT_EQ(-2, IP::ip_input(netdev, badHeader));
 }
 
 TEST(IP, ip_input_zeroSizePacket) {
     vector<uint8_t> zero(0);
-    IP_Packet zeroSizePacket(zero.data(), zero.size());
+    NetBuf nb = from_vector_to_netbuf(zero);
+    IP_Packet zeroSizePacket(&nb);
     ASSERT_EQ(-1, IP::ip_input(netdev, zeroSizePacket));
 }
 
@@ -48,40 +56,43 @@ TEST(IP, validateHeaderSizePacket) {
 }
 
 TEST(IP, validateValidHeader) {
-    vector<uint8_t> v = valid_frame;
-    IP_Packet goodPacket(v.data(), v.size());
+    NetBuf nb = from_vector_to_netbuf(valid_frame);
+    IP_Packet goodPacket(&nb);
     ASSERT_EQ(0, IP::validate_header(goodPacket));
 }
 
 TEST(IP, validateHeaderOfZeroSizePacket) {
     vector<uint8_t> zero;
-    IP_Packet zeroSizePacket(zero.data(), 0);
+    NetBuf nb = from_vector_to_netbuf(zero);
+    IP_Packet zeroSizePacket(&nb);
     ASSERT_EQ(-1, IP::validate_header(zeroSizePacket));
 }
 
 TEST(IP, validateHeaderWithBadHeaderLen) {
-    vector<uint8_t> v = valid_frame;
-    IP_Packet badHeader(v.data(), v.size());
-    v[0] = 0x46;
+    NetBuf nb = from_vector_to_netbuf(valid_frame);
+    nb.getBuf()[0] = 0x46;
+    IP_Packet badHeader(&nb);
     ASSERT_EQ(-2, IP::validate_header(badHeader));
 }
 
 TEST(IP, validateHeaderWithBadChecksum) {
-    vector<uint8_t> v = valid_frame;
-    IP_Packet badHeader(v.data(), v.size());
-    v[1] = 1;
+    NetBuf nb = from_vector_to_netbuf(valid_frame);
+    nb.getBuf()[1] = 1;
+    IP_Packet badHeader(&nb);
     ASSERT_EQ(-3, IP::validate_header(badHeader));
 }
 
 TEST(IP, validatePacketThatDoesntMatchWithSizeInHeader) {
     vector<uint8_t> v = valid_frame;
-    IP_Packet tooLargePacket(v.data(), 1024);
+    v.resize(1024);
+    NetBuf nb = from_vector_to_netbuf(v);
+    IP_Packet tooLargePacket(&nb);
     ASSERT_EQ(-4, IP::validate_header(tooLargePacket));
 }
 
 TEST(IP, getValidPayload) {
-    vector<uint8_t> v = valid_frame;
-    IP_Packet packet(v.data(), v.size());
+    NetBuf nb = from_vector_to_netbuf(valid_frame);
+    IP_Packet packet(&nb);
     IP_Payload payload = IP::getPayload(packet);
     ASSERT_EQ(0x08, payload.get()[0]);
     ASSERT_EQ(64, payload.getSize());
