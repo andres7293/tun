@@ -27,3 +27,10 @@ TEST(ICMP, validate_bad_icmp_header_checksum) {
     IP_Payload payload((uint8_t *)icmp_bad_frame.data(), icmp_bad_frame.size(), &nb);
     ASSERT_NE(0, ICMP::validate_icmp_header_checksum(payload));
 }
+
+TEST(ICMP, calculate_icmp_header_checksum) {
+    NetBuf nb(icmp_frame.size());
+    nb.copy((uint8_t *)icmp_frame.data(), icmp_frame.size());
+    IP_Payload payload(nb.getBuf(), nb.getSize(), &nb);
+    ASSERT_EQ(0xff4f, ICMP::icmp_header_checksum(payload));
+}
