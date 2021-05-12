@@ -15,7 +15,7 @@ buildtest:
 cleantest:
 	make -C ./test clean
 
-runtest:
+runtest: buildtest
 	./test/test
 
 clean:
