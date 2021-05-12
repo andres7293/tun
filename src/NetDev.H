@@ -9,6 +9,7 @@
 class NetDev {
     public:
         NetDev(TunIf &tunif): tunif(tunif) {};
+        virtual ~NetDev() {};
         virtual size_t write(uint8_t *buf, uint16_t size);
         virtual size_t read(uint8_t *buf, uint16_t size);
     private:
