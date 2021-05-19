@@ -5,8 +5,6 @@
 #include <stdint.h>
 #include <exception>
 #include <string.h>
-#include "MemoryPool.H"
-#include "Config.H"
 
 class INetBuf {
     public:
@@ -32,20 +30,6 @@ class NetBuf: public INetBuf {
         NetBuf& operator = (const NetBuf &n) = delete;
         NetBuf(const NetBuf &&n) = delete;
         NetBuf& operator = (const NetBuf &&n) = delete;
-};
-
-template <uint16_t N>
-class StaticNetBuf: public INetBuf {
-    public:
-        StaticNetBuf() {}
-        ~StaticNetBuf() {}
-        StaticNetBuf(StaticNetBuf &n) {
-            memcpy((uint8_t *) this->p, (uint8_t *) n.getBuf(), N);
-        }
-        uint8_t* getBuf() { return this->p; };
-        uint16_t getSize() { return N; }
-    private:
-        uint8_t p[N];
 };
 
 #endif
