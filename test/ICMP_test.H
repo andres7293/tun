@@ -13,12 +13,6 @@ using namespace std;
 
 class ICMP_Test: public ::testing::Test {
     protected:
-        NetBuf from_vector_to_netbuf(vector<uint8_t> v) {
-            NetBuf nb(v.size());
-            nb.copy(v.data(), v.size());
-            return nb;
-        }
-
         IP_Payload getPayload(NetBuf *nb) { 
             return IP_Payload(nb->getBuf(), nb->getSize(), nb);
         }
@@ -29,19 +23,19 @@ class ICMP_Test: public ::testing::Test {
 
 
 TEST_F(ICMP_Test, validate_icmp_header_checksum) {
-    NetBuf nb = from_vector_to_netbuf(icmp_frame);
+    NetBuf nb(icmp_frame);
     IP_Payload payload = getPayload(&nb);
     ASSERT_EQ(0, ICMP::validate_icmp_header_checksum(payload));
 }
 
 TEST_F(ICMP_Test, validate_bad_icmp_header_checksum) {
-    NetBuf nb = from_vector_to_netbuf(icmp_bad_frame);
+    NetBuf nb(icmp_bad_frame);
     IP_Payload payload = getPayload(&nb);
     ASSERT_NE(0, ICMP::validate_icmp_header_checksum(payload));
 }
 
 TEST_F(ICMP_Test, calculate_icmp_header_checksum) {
-    NetBuf nb = from_vector_to_netbuf(icmp_frame);
+    NetBuf nb(icmp_frame);
     IP_Payload payload = getPayload(&nb);
     ASSERT_EQ(0xff4f, ICMP::icmp_header_checksum(payload));
 }
