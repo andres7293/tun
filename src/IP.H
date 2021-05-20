@@ -34,10 +34,15 @@ class IP_Header {
 
 class IP {
     public:
+        IP(NetDev& netdev): netdev(netdev) {}
+        int validateInputSize(INetBuf& nbuf, uint16_t packetSize);
+
         static const int MAX_IP_PACKET_SIZE = 65535;
         static const int MIN_IP_PACKET_SIZE = 20;
 
         static const uint8_t ICMPV4_PROTOCOL = 0x01;
+    private:
+        NetDev& netdev;
 };
 
 ostream& operator << (ostream& os, IP_Header &h);

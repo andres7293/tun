@@ -1,6 +1,19 @@
 #include "IP.H"
 #include "Utils.H"
 
+int IP::validateInputSize(INetBuf& nbuf, uint16_t packetSize) {
+    if (packetSize > nbuf.size()) {
+        return -1;
+    }
+    if (packetSize < IP::MIN_IP_PACKET_SIZE) {
+        return -2;
+    }
+    if (packetSize > IP::MAX_IP_PACKET_SIZE) {
+        return -3;
+    }
+    return 0;
+}
+
 uint8_t IP_Header::getVersion() {
     return ((this->version_headerlen & 0xf0) >> 4);
 }
