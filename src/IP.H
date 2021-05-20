@@ -32,33 +32,8 @@ class IP_Header {
         static const int MIN_IP_HEADER_SIZE_BYTES = 20;
 }__attribute__((packed));
 
-class IP_Packet {
-    public:
-        IP_Packet(INetBuf *netbuf): p(netbuf->getBuf()), size(netbuf->getSize()), netbuf(netbuf) {}
-        IP_Packet(uint8_t *p, uint16_t size, INetBuf *netbuf): p(p), size(size), netbuf(netbuf) {}
-        uint8_t* get() { return this->p; }
-        uint16_t getSize() { return this->size; }
-        INetBuf *getNetBuf() { return this->netbuf; }
-    private:
-        uint8_t *p;
-        uint16_t size;
-        INetBuf *netbuf;
-};
-
-class IP;
-class IP_Payload: public IP_Packet {
-    public:
-        IP_Payload(uint8_t *p, uint16_t size, INetBuf *netbuf): IP_Packet(p, size, netbuf) {}
-};
-
 class IP {
     public:
-        static int ip_input(NetDev &netdev, IP_Packet &packet);
-        static int ip_output(NetDev &netdev, IP_Packet &packet);
-        static int validate_ip_packet_size(uint16_t ip_packet_size);
-        static int validate_header(IP_Packet &packet);
-        static IP_Payload getPayload(IP_Packet &packet);
-
         static const int MAX_IP_PACKET_SIZE = 65535;
         static const int MIN_IP_PACKET_SIZE = 20;
 

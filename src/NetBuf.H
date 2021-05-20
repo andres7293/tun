@@ -9,21 +9,20 @@
 class INetBuf {
     public:
         virtual ~INetBuf() {};
-        virtual uint8_t* getBuf() = 0;
-        virtual uint16_t getSize() = 0;
+        virtual uint8_t* get() = 0;
+        virtual uint16_t size() = 0;
 };
 
 class NetBuf: public INetBuf {
     public:
-        NetBuf(std::vector<uint8_t> v);
         NetBuf(uint8_t *data, uint16_t size);
         NetBuf(uint16_t size);
         ~NetBuf();
-        uint8_t* getBuf();
-        uint16_t getSize();
+        uint8_t* get();
+        uint16_t size();
     private:
         uint8_t* p;
-        uint16_t size;
+        uint16_t _size;
 
         void ctor(uint16_t size);
 

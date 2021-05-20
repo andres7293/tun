@@ -1,14 +1,10 @@
 #include "NetBuf.H"
 #include <string.h>
-
-NetBuf::NetBuf(std::vector<uint8_t> v) {
-    this->ctor(v.size());
-    memcpy((uint8_t *) this->p, (uint8_t *) v.data(), this->size);
-}
+#include <iostream>
 
 NetBuf::NetBuf(uint8_t *data, uint16_t size) {
     this->ctor(size);
-    memcpy((uint8_t *) this->p, (uint8_t *) data, this->size);
+    memcpy((uint8_t *) this->p, (uint8_t *) data, this->_size);
 }
 
 NetBuf::NetBuf(uint16_t size) {
@@ -21,15 +17,15 @@ NetBuf::~NetBuf() {
     }
 }
 
-uint8_t* NetBuf::getBuf() {
+uint8_t* NetBuf::get() {
     return this->p;
 }
 
-uint16_t NetBuf::getSize() {
-    return this->size;
+uint16_t NetBuf::size() {
+    return this->_size;
 }
 
 void NetBuf::ctor(uint16_t size) {
-    this->size = size;
+    this->_size = size;
     this->p = new uint8_t[size];
 }
