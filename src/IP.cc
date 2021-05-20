@@ -1,7 +1,7 @@
 #include "IP.H"
 #include "Utils.H"
 
-int IP::validateInputSize(INetBuf& nbuf, uint16_t packetSize) {
+int IP::validateInput(INetBuf& nbuf, uint16_t packetSize) {
     if (packetSize > nbuf.size()) {
         return -1;
     }

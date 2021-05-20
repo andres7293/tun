@@ -35,7 +35,7 @@ class IP_Header {
 class IP {
     public:
         IP(NetDev& netdev): netdev(netdev) {}
-        int validateInputSize(INetBuf& nbuf, uint16_t packetSize);
+        int validateInput(INetBuf& nbuf, uint16_t packetSize);
 
         static const int MAX_IP_PACKET_SIZE = 65535;
         static const int MIN_IP_PACKET_SIZE = 20;
