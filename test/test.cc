@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "Utils_test.H"
 #include "IP_Header_test.H"
+#include "RawPointer_test.H"
 
 int main(int argc, char *argv[]) {
     ::testing::InitGoogleTest(&argc, argv);
