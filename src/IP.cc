@@ -1,6 +1,5 @@
 #include "IP.H"
 #include "Utils.H"
-#include "ICMP.H"
 
 int IP::ip_input(NetDev &netdev, IP_Packet &packet) {
     if (IP::validate_ip_packet_size(packet.getSize()) != 0)
@@ -13,7 +12,6 @@ int IP::ip_input(NetDev &netdev, IP_Packet &packet) {
 
     switch (iph->protocol) {
         case IP::ICMPV4_PROTOCOL:
-            ICMP::icmp_input(netdev, packet);
             break;
     }
     return 0;
