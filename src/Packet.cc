@@ -5,9 +5,9 @@ int Packet::boundCheck() {
     uint16_t psize = this->getPacketSize();
     if (psize > maxBufSize)
         return -1;
-    if (psize > maxBufSize)
+    if (this->header.size() > maxBufSize)
         return -2;
-    if (psize > maxBufSize)
+    if (this->payload.size() > maxBufSize)
         return -3;
     return 0;
 }
