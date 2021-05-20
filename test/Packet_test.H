@@ -40,3 +40,12 @@ TEST(Packet, testPacketWithValidBounds) {
     Packet packet(nb, header.size() + payload.size(), header, payload);
     ASSERT_EQ(0, packet.boundCheck());
 }
+
+TEST(Packet, testSuscriptOperator) {
+    NetBuf nb(120);
+    RawPointer header(nullptr, 20);
+    RawPointer payload(nullptr, 30);
+    Packet packet(nb, header.size() + payload.size(), header, payload);
+
+    ASSERT_EQ(nb.get()[12], packet[12]);
+}

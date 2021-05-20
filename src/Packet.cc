@@ -11,3 +11,7 @@ int Packet::boundCheck() {
         return -3;
     return 0;
 }
+
+uint8_t Packet::operator [] (int index) {
+    return this->nbuf.get()[index];
+}

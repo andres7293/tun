@@ -18,6 +18,7 @@ class Packet {
         RawPointer getHeader() { return this->header; }
         RawPointer getPayload() { return this->payload; }
         int boundCheck();
+        uint8_t operator [] (int index);
     private:
         INetBuf &nbuf;
         uint16_t _psize;
