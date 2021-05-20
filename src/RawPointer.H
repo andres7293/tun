@@ -10,6 +10,7 @@ class RawPointer {
         virtual ~RawPointer() {}
         uint8_t* get() { return this->p; }
         uint16_t size() { return this->_size; }
+        uint8_t operator[] (int index) { return this->p[index]; }
     private:
         uint8_t* p;
         uint16_t _size;

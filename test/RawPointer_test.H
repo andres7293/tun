@@ -10,3 +10,11 @@ TEST(RawPointer, testRawPointer) {
     ASSERT_EQ(buf, rptr.get());
     delete[] buf;
 }
+
+TEST(RawPointer, testSubscripOperator) {
+    int size = 234;
+    uint8_t *buf = new uint8_t[size];
+    RawPointer rptr(buf, size);
+    ASSERT_EQ(buf[13], rptr[13]);
+    delete[] buf;
+}
