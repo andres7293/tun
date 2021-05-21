@@ -2,7 +2,7 @@
 
 int Packet::boundCheck() {
     uint16_t maxBufSize = this->nbuf.size();
-    uint16_t psize = this->getPacketSize();
+    uint16_t psize = this->size();
     if (psize > maxBufSize)
         return -1;
     if (this->header.size() > maxBufSize)

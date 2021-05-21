@@ -5,7 +5,13 @@
 #include "NetBuf.H"
 #include "Buffer.H"
 
-class Packet {
+class IPacket {
+    public:
+        virtual uint8_t* data() = 0;
+        virtual uint16_t size() = 0;
+};
+
+class Packet: public IPacket {
     public:
         Packet(INetBuf& nbuf, uint16_t packetSize, Buffer header, Buffer payload):
             nbuf(nbuf),
@@ -13,8 +19,9 @@ class Packet {
             header(header),
             payload(payload) {}
 
+        uint8_t* data() { return this->nbuf.data(); }
+        uint16_t size() { return this->_psize; }
         INetBuf& getNetBuf() { return this->nbuf; }
-        uint16_t getPacketSize() { return this->_psize; }
         Buffer getHeader() { return this->header; }
         Buffer getPayload() { return this->payload; }
         int boundCheck();

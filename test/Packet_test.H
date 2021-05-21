@@ -6,7 +6,7 @@ TEST(Packet, testPacketSize) {
     Buffer header(nb.data(), 20);
     Buffer payload(nb.data(), 150, 20);
     Packet packet(nb, header.size() + payload.size(), header, payload);
-    ASSERT_EQ(header.size() + payload.size(), packet.getPacketSize());
+    ASSERT_EQ(header.size() + payload.size(), packet.size());
 }
 
 TEST(Packet, testPacketSizeOutOfBounds) {
