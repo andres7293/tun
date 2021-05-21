@@ -3,11 +3,11 @@
 
 #include <stdint.h>
 #include "NetBuf.H"
-#include "RawPointer.H"
+#include "Buffer.H"
 
 class Packet {
     public:
-        Packet(INetBuf& nbuf, uint16_t packetSize, RawPointer header, RawPointer payload):
+        Packet(INetBuf& nbuf, uint16_t packetSize, Buffer header, Buffer payload):
             nbuf(nbuf),
             _psize(packetSize),
             header(header),
@@ -15,15 +15,15 @@ class Packet {
 
         INetBuf& getNetBuf() { return this->nbuf; }
         uint16_t getPacketSize() { return this->_psize; }
-        RawPointer getHeader() { return this->header; }
-        RawPointer getPayload() { return this->payload; }
+        Buffer getHeader() { return this->header; }
+        Buffer getPayload() { return this->payload; }
         int boundCheck();
         uint8_t operator [] (int index);
     private:
         INetBuf &nbuf;
         uint16_t _psize;
-        RawPointer header;
-        RawPointer payload;
+        Buffer header;
+        Buffer payload;
 
 };
 

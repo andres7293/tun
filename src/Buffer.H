@@ -9,11 +9,6 @@ class Buffer {
     private:
         unsigned int _size;
         void* _data;
-
-        Buffer(Buffer& b) = delete;
-        Buffer& operator = (const Buffer& b) = delete;
-        Buffer(Buffer&& b) = delete;
-        Buffer& operator = (const Buffer&& b) = delete;
 };
 
 #endif
