@@ -7,7 +7,7 @@ TEST(RawPointer, testRawPointer) {
     uint8_t *buf = new uint8_t[size];
     RawPointer rptr(buf, size);
     ASSERT_EQ(size, rptr.size());
-    ASSERT_EQ(buf, rptr.get());
+    ASSERT_EQ(buf, rptr.data());
     delete[] buf;
 }
 
