@@ -9,7 +9,7 @@
 class INetBuf {
     public:
         virtual ~INetBuf() {};
-        virtual uint8_t* get() = 0;
+        virtual uint8_t* data() = 0;
         virtual uint16_t size() = 0;
 };
 
@@ -18,7 +18,7 @@ class NetBuf: public INetBuf {
         NetBuf(uint8_t *data, uint16_t size);
         NetBuf(uint16_t size);
         ~NetBuf();
-        uint8_t* get();
+        uint8_t* data();
         uint16_t size();
     private:
         uint8_t* p;

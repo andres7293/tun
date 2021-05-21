@@ -3,8 +3,8 @@
 
 TEST(Packet, testPacketSize) {
     NetBuf nb(1024);
-    RawPointer header(nb.get(), 20);
-    RawPointer payload(&nb.get()[20], 150);
+    RawPointer header(nb.data(), 20);
+    RawPointer payload(&nb.data()[20], 150);
     Packet packet(nb, header.size() + payload.size(), header, payload);
     ASSERT_EQ(header.size() + payload.size(), packet.getPacketSize());
 }
@@ -47,5 +47,5 @@ TEST(Packet, testSuscriptOperator) {
     RawPointer payload(nullptr, 30);
     Packet packet(nb, header.size() + payload.size(), header, payload);
 
-    ASSERT_EQ(nb.get()[12], packet[12]);
+    ASSERT_EQ(nb.data()[12], packet[12]);
 }

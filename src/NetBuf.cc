@@ -17,7 +17,7 @@ NetBuf::~NetBuf() {
     }
 }
 
-uint8_t* NetBuf::get() {
+uint8_t* NetBuf::data() {
     return this->p;
 }
 

@@ -13,5 +13,5 @@ int Packet::boundCheck() {
 }
 
 uint8_t Packet::operator [] (int index) {
-    return this->nbuf.get()[index];
+    return this->nbuf.data()[index];
 }
