@@ -9,6 +9,10 @@ class IPacket {
     public:
         virtual uint8_t* data() = 0;
         virtual uint16_t size() = 0;
+        virtual INetBuf& getNetBuf() = 0;
+        virtual Buffer getHeader() = 0;
+        virtual Buffer getPayload() = 0;
+        virtual int boundCheck() = 0;
 };
 
 class Packet: public IPacket {
