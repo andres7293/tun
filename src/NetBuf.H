@@ -32,4 +32,14 @@ class NetBuf: public INetBuf {
         NetBuf& operator = (const NetBuf &&n) = delete;
 };
 
+template <int N>
+class StaticNetBuf: public INetBuf {
+    public:
+        StaticNetBuf() {};
+        uint8_t* data() { return this->p; }
+        uint16_t size() { return N; }
+    private:
+        uint8_t p[N];
+};
+
 #endif
