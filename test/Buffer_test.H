@@ -1,0 +1,33 @@
+#include <bits/stdint-uintn.h>
+#include <gtest/gtest.h>
+#include "../src/Buffer.H"
+
+TEST(Buffer, testvalidBuffer) {
+    std::array<char, 20> arr { "Hello world" };
+    Buffer buf(arr.data(), arr.size());
+    ASSERT_EQ(arr.size(), buf.size());
+    ASSERT_EQ(arr.data(), buf.data());
+}
+
+TEST(Buffer, testLimitBufferSize) {
+    std::array<char, 20> arr { "Hello world" };
+    Buffer buf(arr.data(), 5);
+    ASSERT_EQ(5, buf.size());
+}
+
+TEST(Buffer, testBufferOffset) {
+    std::array<char, 20> arr { "Hello world" };
+    Buffer buf(arr.data(), arr.size(), 4);
+
+    ASSERT_EQ(arr.size() - 4, buf.size());
+    char *car = (char*) buf.data();
+    ASSERT_EQ('o', car[0]);
+    ASSERT_EQ('w', car[2]);
+}
+
+TEST(Buffer, testBufferOffsetGreaterThanBufferSize) {
+    std::array<char, 20> arr { "Hello world" };
+    Buffer buf(arr.data(), arr.size(), 50);
+    ASSERT_EQ(NULL, buf.data());
+    ASSERT_EQ(0, buf.size());
+}
