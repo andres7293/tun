@@ -31,3 +31,21 @@ TEST(Buffer, testBufferOffsetGreaterThanBufferSize) {
     ASSERT_EQ(NULL, buf.data());
     ASSERT_EQ(0, buf.size());
 }
+
+TEST(Buffer, copyBufferWithCopiedBufferLimitedInSize) {
+    std::array<char, 20> arr { "Hello world" };
+    Buffer original(arr.data(), arr.size());
+    Buffer copy(original, 7);
+    char* car = (char *) copy.data();
+    ASSERT_EQ(7, copy.size());
+    ASSERT_EQ('H', car[0]);
+}
+
+TEST(Buffer, copyBufferWithCopiedBufferGreaterThanBufferSize) {
+    std::array<char, 20> arr { "Hello world" };
+    Buffer original(arr.data(), arr.size());
+    Buffer copy(original, 50);
+
+    ASSERT_EQ(NULL, copy.data());
+    ASSERT_EQ(0, copy.size());
+}
