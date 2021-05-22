@@ -10,6 +10,18 @@ class IP_Test: public ::testing::Test {
         IP ip { netdev };
 };
 
+TEST_F(IP_Test, validateCorrectInput) {
+    NetBuf nb(123);
+    Buffer buf(nb.data(), nb.size());
+    ASSERT_EQ(IP::RetCode::OK, ip.input(nb, buf));
+}
+
+TEST_F(IP_Test, validateIncorrectInput) {
+    NetBuf nb(1024);
+    ASSERT_EQ(IP::RetCode::OK, ip.input(nb, Buffer(nb.data(), nb.size())));
+    ASSERT_EQ(IP::RetCode::INVALID_INPUT_SIZE, ip.input(nb, Buffer(nb.data(), 2)));
+}
+
 TEST_F(IP_Test, validateCorrectInputSize) {
     NetBuf nb(100);
     ASSERT_EQ(0, ip.validateInputSize(nb, 80));
