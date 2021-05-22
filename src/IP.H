@@ -7,6 +7,7 @@
 #include "Utils.H"
 #include "NetDev.H"
 #include "NetBuf.H"
+#include "Buffer.H"
 
 using namespace std;
 
@@ -34,8 +35,15 @@ class IP_Header {
 
 class IP {
     public:
+
+        enum class RetCode: int {
+            OK,
+            INVALID_INPUT_SIZE
+        };
+
         IP(NetDev& netdev): netdev(netdev) {}
-        int validateInput(INetBuf& nbuf, uint16_t packetSize);
+        RetCode input(INetBuf& nbuf, Buffer packet);
+        int validateInputSize(INetBuf& nbuf, uint16_t packetSize);
 
         static const int MAX_IP_PACKET_SIZE = 65535;
         static const int MIN_IP_PACKET_SIZE = 20;

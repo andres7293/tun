@@ -1,7 +1,14 @@
 #include "IP.H"
 #include "Utils.H"
 
-int IP::validateInput(INetBuf& nbuf, uint16_t packetSize) {
+IP::RetCode IP::input(INetBuf& nbuf, Buffer packet) {
+    if (this->validateInputSize(nbuf, packet.size()) < 0) {
+        return IP::RetCode::INVALID_INPUT_SIZE;
+    }
+    return IP::RetCode::OK;
+}
+
+int IP::validateInputSize(INetBuf& nbuf, uint16_t packetSize) {
     if (packetSize > nbuf.size()) {
         return -1;
     }
