@@ -38,7 +38,9 @@ class IP {
 
         enum class RetCode: int {
             OK,
-            INVALID_INPUT_SIZE,
+            PACKET_SIZE_GREATER_THAN_NETBUF_SIZE,
+            PACKET_SIZE_LESS_THAN_MIN_PACKET_SIZE,
+            PACKET_SIZE_GREATER_THAN_MAX_PACKET_SIZE,
             INVALID_IP_VERSION,
             HEADER_LEN_DIFFERENT_FROM_20_BYTES,
             EXPECTED_PACKET_SIZE_DOESNT_MATCH_WITH_RECEIVED_PACKET_SIZE,
@@ -47,9 +49,9 @@ class IP {
 
         IP(NetDev& netdev): netdev(netdev) {}
         RetCode input(INetBuf& nbuf, Buffer packet);
-        int validateInputSize(INetBuf& nbuf, uint16_t packetSize);
-        IP::RetCode validateHeader(Buffer packet);
-        IP::RetCode validateHeaderChecksum(Buffer packet);
+        RetCode validateInputSize(INetBuf& nbuf, uint16_t packetSize);
+        RetCode validateHeader(Buffer packet);
+        RetCode validateHeaderChecksum(Buffer packet);
 
         static const int MAX_IP_PACKET_SIZE = 65535;
         static const int MIN_IP_PACKET_SIZE = 20;

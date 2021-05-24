@@ -2,23 +2,20 @@
 #include "Utils.H"
 
 IP::RetCode IP::input(INetBuf& nbuf, Buffer packet) {
-    if (this->validateInputSize(nbuf, packet.size()) < 0) {
-        return IP::RetCode::INVALID_INPUT_SIZE;
-    }
     return IP::RetCode::OK;
 }
 
-int IP::validateInputSize(INetBuf& nbuf, uint16_t packetSize) {
+IP::RetCode IP::validateInputSize(INetBuf& nbuf, uint16_t packetSize) {
     if (packetSize > nbuf.size()) {
-        return -1;
+        return IP::RetCode::PACKET_SIZE_GREATER_THAN_NETBUF_SIZE;
     }
     if (packetSize < IP::MIN_IP_PACKET_SIZE) {
-        return -2;
+        return IP::RetCode::PACKET_SIZE_LESS_THAN_MIN_PACKET_SIZE;
     }
     if (packetSize > IP::MAX_IP_PACKET_SIZE) {
-        return -3;
+        return IP::RetCode::PACKET_SIZE_GREATER_THAN_MAX_PACKET_SIZE;
     }
-    return 0;
+    return IP::RetCode::OK;
 }
 
 IP::RetCode IP::validateHeader(Buffer packet) {
