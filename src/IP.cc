@@ -36,6 +36,15 @@ IP::RetCode IP::validateHeader(Buffer packet) {
     return IP::RetCode::OK;
 }
 
+IP::RetCode IP::validateHeaderChecksum(Buffer packet) {
+    IP_Header *iph = (IP_Header *) packet.data();
+    uint16_t checksum = utils::checksum((uint16_t *) packet.data(), iph->getHeaderLenInBytes(), 0);
+    if (checksum != 0) {
+        return IP::RetCode::INVALID_HEADER_CHECKSUM;
+    }
+    return IP::RetCode::OK;
+}
+
 uint8_t IP_Header::getVersion() {
     return ((this->version_headerlen & 0xf0) >> 4);
 }

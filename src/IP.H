@@ -41,13 +41,15 @@ class IP {
             INVALID_INPUT_SIZE,
             INVALID_IP_VERSION,
             HEADER_LEN_DIFFERENT_FROM_20_BYTES,
-            EXPECTED_PACKET_SIZE_DOESNT_MATCH_WITH_RECEIVED_PACKET_SIZE
+            EXPECTED_PACKET_SIZE_DOESNT_MATCH_WITH_RECEIVED_PACKET_SIZE,
+            INVALID_HEADER_CHECKSUM
         };
 
         IP(NetDev& netdev): netdev(netdev) {}
         RetCode input(INetBuf& nbuf, Buffer packet);
         int validateInputSize(INetBuf& nbuf, uint16_t packetSize);
         IP::RetCode validateHeader(Buffer packet);
+        IP::RetCode validateHeaderChecksum(Buffer packet);
 
         static const int MAX_IP_PACKET_SIZE = 65535;
         static const int MIN_IP_PACKET_SIZE = 20;

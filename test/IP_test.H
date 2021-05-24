@@ -2,6 +2,7 @@
 #include "../src/IP.H"
 #include "mocks/NetDevMock.H"
 #include "mocks/TunIfMock.H"
+#include "data-test/Test_Frames.H"
 
 class IP_Test: public ::testing::Test {
     protected:
@@ -51,11 +52,25 @@ TEST_F(IP_Test, validateHeaderInvalidHeaderSize) {
     ASSERT_EQ(IP::RetCode::HEADER_LEN_DIFFERENT_FROM_20_BYTES, ip.validateHeader(packet));
 }
 
-TEST_F(IP_Test, validateHeaderHeaderLenDoesntMatchWithHeaderLenSize) {
+TEST_F(IP_Test, validateTotalLenDoesntMatchWithReceivedPacketSize) {
     IP_Header iph;
     iph.version_headerlen = 0x45;
     iph.total_len = 50;
     Buffer packet((uint8_t *) &iph, sizeof(IP_Header));
     ASSERT_EQ(IP::RetCode::EXPECTED_PACKET_SIZE_DOESNT_MATCH_WITH_RECEIVED_PACKET_SIZE,
             ip.validateHeader(packet));
+}
+
+TEST_F(IP_Test, validateValidHeaderChecksum) {
+    auto v = Test_Frames::valid_ip_header;
+    Buffer packet(v.data(), v.size());
+    ASSERT_EQ(IP::RetCode::OK,
+            ip.validateHeaderChecksum(packet));
+}
+
+TEST_F(IP_Test, validateInvalidHeaderChecksum) {
+    auto v = Test_Frames::invalid_ip_header;
+    Buffer packet(v.data(), v.size());
+    ASSERT_EQ(IP::RetCode::INVALID_HEADER_CHECKSUM,
+            ip.validateHeaderChecksum(packet));
 }
