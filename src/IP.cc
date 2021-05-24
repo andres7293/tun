@@ -21,6 +21,21 @@ int IP::validateInputSize(INetBuf& nbuf, uint16_t packetSize) {
     return 0;
 }
 
+IP::RetCode IP::validateHeader(Buffer packet) {
+    IP_Header *iph = (IP_Header *) packet.data();
+    if (iph->getVersion() != IP::IPV4_VERSION) {
+        return IP::RetCode::INVALID_IP_VERSION;
+    }
+    if (iph->getHeaderLenInBytes() != IP::MIN_IP_PACKET_SIZE) {
+        return IP::RetCode::HEADER_LEN_DIFFERENT_FROM_20_BYTES;
+    }
+    uint16_t expectedPacketSize = iph->total_len;
+    if (packet.size() != expectedPacketSize) {
+        return IP::RetCode::EXPECTED_PACKET_SIZE_DOESNT_MATCH_WITH_RECEIVED_PACKET_SIZE;
+    }
+    return IP::RetCode::OK;
+}
+
 uint8_t IP_Header::getVersion() {
     return ((this->version_headerlen & 0xf0) >> 4);
 }

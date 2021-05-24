@@ -36,3 +36,26 @@ TEST_F(IP_Test, validateInputSizeSizeWhenPacketSizeIsLargerThanNetBuf) {
     NetBuf nb(100);
     ASSERT_EQ(-1, ip.validateInputSize(nb, 200));
 }
+
+TEST_F(IP_Test, validateHeaderInvalidIPVersion) {
+    IP_Header iph;
+    iph.version_headerlen = 0x65;
+    Buffer packet((uint8_t *) &iph, sizeof(IP_Header));
+    ASSERT_EQ(IP::RetCode::INVALID_IP_VERSION, ip.validateHeader(packet));
+}
+
+TEST_F(IP_Test, validateHeaderInvalidHeaderSize) {
+    IP_Header iph;
+    iph.version_headerlen = 0x47;
+    Buffer packet((uint8_t *) &iph, sizeof(IP_Header));
+    ASSERT_EQ(IP::RetCode::HEADER_LEN_DIFFERENT_FROM_20_BYTES, ip.validateHeader(packet));
+}
+
+TEST_F(IP_Test, validateHeaderHeaderLenDoesntMatchWithHeaderLenSize) {
+    IP_Header iph;
+    iph.version_headerlen = 0x45;
+    iph.total_len = 50;
+    Buffer packet((uint8_t *) &iph, sizeof(IP_Header));
+    ASSERT_EQ(IP::RetCode::EXPECTED_PACKET_SIZE_DOESNT_MATCH_WITH_RECEIVED_PACKET_SIZE,
+            ip.validateHeader(packet));
+}

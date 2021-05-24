@@ -38,16 +38,21 @@ class IP {
 
         enum class RetCode: int {
             OK,
-            INVALID_INPUT_SIZE
+            INVALID_INPUT_SIZE,
+            INVALID_IP_VERSION,
+            HEADER_LEN_DIFFERENT_FROM_20_BYTES,
+            EXPECTED_PACKET_SIZE_DOESNT_MATCH_WITH_RECEIVED_PACKET_SIZE
         };
 
         IP(NetDev& netdev): netdev(netdev) {}
         RetCode input(INetBuf& nbuf, Buffer packet);
         int validateInputSize(INetBuf& nbuf, uint16_t packetSize);
+        IP::RetCode validateHeader(Buffer packet);
 
         static const int MAX_IP_PACKET_SIZE = 65535;
         static const int MIN_IP_PACKET_SIZE = 20;
 
+        static const uint8_t IPV4_VERSION = 0x04;
         static const uint8_t ICMPV4_PROTOCOL = 0x01;
     private:
         NetDev& netdev;
