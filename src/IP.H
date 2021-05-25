@@ -63,5 +63,6 @@ class IP {
 };
 
 ostream& operator << (ostream& os, IP_Header &h);
+ostream& operator << (ostream& os, IP::RetCode &ret);
 
 #endif

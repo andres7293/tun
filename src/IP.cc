@@ -2,6 +2,16 @@
 #include "Utils.H"
 
 IP::RetCode IP::input(INetBuf& nbuf, Buffer packet) {
+    IP::RetCode ret;
+    ret = this->validateInputSize(nbuf, packet.size());
+    if (ret != IP::RetCode::OK)
+        return ret;
+    ret = this->validateHeader(packet);
+    if (ret != IP::RetCode::OK)
+        return ret;
+    ret = this->validateHeaderChecksum(packet);
+    if (ret != IP::RetCode::OK)
+        return ret;
     return IP::RetCode::OK;
 }
 
@@ -75,5 +85,33 @@ ostream& operator << (ostream& os, IP_Header &h) {
          << ",src_addr=0x"         << hex << (int) h.src_addr          << dec
          << ",dst_addr=0x"         << hex << (int) h.dst_addr          << dec
          << "}";
+    return os;
+}
+
+ostream& operator << (ostream& os, IP::RetCode &ret) {
+    if (ret == IP::RetCode::OK) {
+        os << "IP::RetCode::OK";
+    }
+    else if (ret == IP::RetCode:: PACKET_SIZE_GREATER_THAN_NETBUF_SIZE) {
+        os << "IP::RetCode:: PACKET_SIZE_GREATER_THAN_NETBUF_SIZE";
+    }
+    else if (ret == IP::RetCode::PACKET_SIZE_LESS_THAN_MIN_PACKET_SIZE) {
+        os << "IP::RetCode::PACKET_SIZE_LESS_THAN_MIN_PACKET_SIZE";
+    }
+    else if (ret == IP::RetCode:: PACKET_SIZE_GREATER_THAN_MAX_PACKET_SIZE) {
+        os << "IP::RetCode:: PACKET_SIZE_GREATER_THAN_MAX_PACKET_SIZE";
+    }
+    else if (ret == IP::RetCode::INVALID_IP_VERSION) {
+        os << "IP::RetCode::INVALID_IP_VERSION";
+    }
+    else if (ret == IP::RetCode::HEADER_LEN_DIFFERENT_FROM_20_BYTES) {
+        os << "IP::RetCode::HEADER_LEN_DIFFERENT_FROM_20_BYTES";
+    }
+    else if (ret == IP::RetCode::EXPECTED_PACKET_SIZE_DOESNT_MATCH_WITH_RECEIVED_PACKET_SIZE) {
+        os << "IP::RetCode::EXPECTED_PACKET_SIZE_DOESNT_MATCH_WITH_RECEIVED_PACKET_SIZE";
+    }
+    else if (ret == IP::RetCode::INVALID_HEADER_CHECKSUM) {
+        os << "IP::RetCode::INVALID_HEADER_CHECKSUM";
+    }
     return os;
 }
