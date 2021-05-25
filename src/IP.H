@@ -48,7 +48,7 @@ class IP {
         };
 
         IP(NetDev& netdev): netdev(netdev) {}
-        RetCode input(INetBuf& nbuf, Buffer packet);
+        RetCode input(INetBuf& nbuf, uint16_t packetSize);
         RetCode validateInputSize(INetBuf& nbuf, uint16_t packetSize);
         RetCode validateHeader(Buffer packet);
         RetCode validateHeaderChecksum(Buffer packet);

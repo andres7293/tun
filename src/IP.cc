@@ -1,9 +1,10 @@
 #include "IP.H"
 #include "Utils.H"
 
-IP::RetCode IP::input(INetBuf& nbuf, Buffer packet) {
+IP::RetCode IP::input(INetBuf& nbuf, uint16_t packetSize) {
     IP::RetCode ret;
-    ret = this->validateInputSize(nbuf, packet.size());
+    Buffer packet(nbuf.data(), packetSize);
+    ret = this->validateInputSize(nbuf, packetSize);
     if (ret != IP::RetCode::OK)
         return ret;
     ret = this->validateHeader(packet);
