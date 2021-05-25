@@ -36,7 +36,7 @@ IP::RetCode IP::validateHeader(Buffer packet) {
     if (iph->getHeaderLenInBytes() != IP::MIN_IP_PACKET_SIZE) {
         return IP::RetCode::HEADER_LEN_DIFFERENT_FROM_20_BYTES;
     }
-    uint16_t expectedPacketSize = iph->total_len;
+    uint16_t expectedPacketSize = utils::hostToNetShort(iph->total_len);
     if (packet.size() != expectedPacketSize) {
         return IP::RetCode::EXPECTED_PACKET_SIZE_DOESNT_MATCH_WITH_RECEIVED_PACKET_SIZE;
     }
