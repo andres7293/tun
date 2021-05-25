@@ -18,6 +18,10 @@ Buffer::Buffer(Buffer& buffer, unsigned int sizeLimit) {
     this->_size = sizeLimit;
 }
 
+Buffer Buffer::createWithOffset(Buffer& buffer, unsigned int offset) {
+    return Buffer(buffer.data(), buffer.size(), offset);
+}
+
 void* Buffer::data() {
     return this->_data; 
 }

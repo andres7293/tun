@@ -65,3 +65,13 @@ TEST(Buffer, testZeroSizeBuffer) {
     ASSERT_EQ(false, buf.isNull());
     ASSERT_EQ(0, buf.size());
 }
+
+TEST(Buffer, testCreateWithOffset) {
+    std::array<char, 12> arr { "Hello world" };
+    Buffer buffer(arr.data(), arr.size());
+    Buffer bufWitOffset = Buffer::createWithOffset(buffer, 6);
+    ASSERT_EQ(12 - 6, bufWitOffset.size());
+    char *car = (char *) bufWitOffset.data();
+    ASSERT_EQ('w', car[0]);
+    ASSERT_EQ('o', car[1]);
+}
