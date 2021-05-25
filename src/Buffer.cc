@@ -9,7 +9,7 @@ Buffer::Buffer(void* data, unsigned int sizeInBytes, unsigned int offsetInBytes)
     this->_size = sizeInBytes - offsetInBytes;
 }
 
-Buffer::Buffer(Buffer& buffer, int sizeLimit) {
+Buffer::Buffer(Buffer& buffer, unsigned int sizeLimit) {
     if (sizeLimit > buffer.size()) {
         this->cancelBuffer();
         return;
