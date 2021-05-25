@@ -11,6 +11,14 @@ class IP_Test: public ::testing::Test {
         IP ip { netdev };
 };
 
+TEST_F(IP_Test, validIPInputFrame) {
+    auto v = Test_Frames::icmp_echo_request;
+    NetBuf nb(v.data(), v.size());
+    Buffer packet(nb.data(), nb.size());
+    ASSERT_EQ(IP::RetCode::OK,
+            ip.input(nb, packet));
+}
+
 TEST_F(IP_Test, validateCorrectInputSize) {
     NetBuf nb(100);
     ASSERT_EQ(IP::RetCode::OK, ip.validateInputSize(nb, 80));
