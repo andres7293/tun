@@ -7,6 +7,7 @@ class Buffer {
         Buffer(Buffer& buffer, int sizeLimit);
         void* data();
         unsigned int size();
+        bool isNull();
     private:
         unsigned int _size;
         void* _data;

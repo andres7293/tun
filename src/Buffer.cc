@@ -26,6 +26,12 @@ unsigned int Buffer::size() {
     return this->_size; 
 }
 
+bool Buffer::isNull() {
+    if (this->data() == nullptr)
+        return true;
+    return false;
+}
+
 void Buffer::cancelBuffer() {
     this->_data = nullptr;
     this->_size = 0;

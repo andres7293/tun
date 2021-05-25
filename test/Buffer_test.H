@@ -49,3 +49,19 @@ TEST(Buffer, copyBufferWithCopiedBufferGreaterThanBufferSize) {
     ASSERT_EQ(NULL, copy.data());
     ASSERT_EQ(0, copy.size());
 }
+
+TEST(Buffer, testNullBuffer) {
+    std::array<char, 20> arr { "Hello world" };
+    Buffer buf(nullptr, arr.size());
+
+    ASSERT_EQ(true, buf.isNull());
+    ASSERT_EQ(20, buf.size());
+}
+
+TEST(Buffer, testZeroSizeBuffer) {
+    std::array<char, 20> arr { "Hello world" };
+    Buffer buf(arr.data(), 0);
+
+    ASSERT_EQ(false, buf.isNull());
+    ASSERT_EQ(0, buf.size());
+}
