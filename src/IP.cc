@@ -18,7 +18,7 @@ IP::RetCode IP::input(INetBuf& nbuf, uint16_t packetSize) {
     switch(iph->protocol) {
         case ICMPV4_PROTOCOL:
             ICMP icmp {};
-            icmp.input(Buffer::createWithOffset(packet, 20));
+            icmp.input(Buffer::createWithOffset(packet, sizeof(IP_Header)));
             break;
     }
     return IP::RetCode::OK;
