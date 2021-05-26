@@ -1,6 +1,7 @@
 #ifndef __ICMP_H__
 #define __ICMP_H__
 
+#include <bits/stdint-uintn.h>
 #include <stdint.h>
 #include "Buffer.H"
 
@@ -15,7 +16,10 @@ class ICMP {
         enum class RetCode: int {
             OK,
             HEADER_SIZE_TOO_SHORT,
-            CHECKSUM_ERROR
+            CHECKSUM_ERROR,
+            MALFORMED_ICMP_ECHO_REQUEST,
+            ECHO_REPLY,
+            UNKNOW
         };
 
         ICMP() {}
@@ -24,6 +28,14 @@ class ICMP {
     private:
         RetCode validateHeaderSize(Buffer ip_payload);
         RetCode validateHeaderChecksum(Buffer ip_payload);
+        RetCode echo_request(ICMP_Header *icmph, Buffer ip_payload);
+        void echo_reply(ICMP_Header *icmp, Buffer ip_payload);
+
+        static const uint8_t ECHO_REQUEST_TYPE = 0x08;
+        static const uint8_t ECHO_REQUEST_CODE = 0x00;
+
+        static const uint8_t ECHO_REPLY_TYPE = 0x00;
+        static const uint8_t ECHO_REPLY_CODE = 0x00;
 };
 
 #endif
