@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(SRC 
 src/IP.cc
+src/ICMP.cc
 src/Buffer.cc
 src/NetBuf.cc
 src/NetDev.cc
