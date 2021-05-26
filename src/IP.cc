@@ -1,5 +1,6 @@
 #include "IP.H"
 #include "Utils.H"
+#include "ICMP.H"
 
 IP::RetCode IP::input(INetBuf& nbuf, uint16_t packetSize) {
     IP::RetCode ret;
@@ -13,6 +14,13 @@ IP::RetCode IP::input(INetBuf& nbuf, uint16_t packetSize) {
     ret = this->validateHeaderChecksum(packet);
     if (ret != IP::RetCode::OK)
         return ret;
+    IP_Header *iph = (IP_Header *) packet.data();
+    switch(iph->protocol) {
+        case ICMPV4_PROTOCOL:
+            ICMP icmp {};
+            icmp.input(Buffer::createWithOffset(packet, 20));
+            break;
+    }
     return IP::RetCode::OK;
 }
 
