@@ -19,8 +19,19 @@ IP::RetCode IP::input(INetBuf& nbuf, uint16_t packetSize) {
         case ICMPV4_PROTOCOL:
             ICMP icmp {};
             icmp.input(Buffer::createWithOffset(packet, sizeof(IP_Header)));
+            this->icmp_output(iph, packet);
             break;
     }
+    return IP::RetCode::OK;
+}
+
+IP::RetCode IP::icmp_output(IP_Header *iph, Buffer packet) {
+    uint32_t src = iph->src_addr;
+    uint32_t dst = iph->dst_addr;
+    iph->src_addr = dst;
+    iph->dst_addr = src;
+    iph->header_checksum = this->generate_header_checksum(iph);
+    this->netdev.write((uint8_t *) packet.data(), packet.size());
     return IP::RetCode::OK;
 }
 
@@ -60,6 +71,12 @@ IP::RetCode IP::validateHeaderChecksum(Buffer packet) {
     }
     return IP::RetCode::OK;
 }
+
+uint16_t IP::generate_header_checksum(IP_Header *iph) {
+    iph->header_checksum = 0;
+    return utils::checksum(iph, sizeof(IP_Header), 0);
+}
+
 
 uint8_t IP_Header::getVersion() {
     return ((this->version_headerlen & 0xf0) >> 4);

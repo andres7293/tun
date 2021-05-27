@@ -49,9 +49,11 @@ class IP {
 
         IP(NetDev& netdev): netdev(netdev) {}
         RetCode input(INetBuf& nbuf, uint16_t packetSize);
+        RetCode icmp_output(IP_Header *iph, Buffer packet);
         RetCode validateInputSize(INetBuf& nbuf, uint16_t packetSize);
         RetCode validateHeader(Buffer packet);
         RetCode validateHeaderChecksum(Buffer packet);
+        uint16_t generate_header_checksum(IP_Header *iph);
 
         static const int MAX_IP_PACKET_SIZE = 65535;
         static const int MIN_IP_PACKET_SIZE = 20;
