@@ -31,6 +31,8 @@ class ICMP {
         RetCode echo_request(ICMP_Header *icmph, Buffer ip_payload);
         void echo_reply(ICMP_Header *icmp, Buffer ip_payload);
 
+        uint16_t checksum(ICMP_Header *icmp, Buffer ip_payload);
+
         static const uint8_t ECHO_REQUEST_TYPE = 0x08;
         static const uint8_t ECHO_REQUEST_CODE = 0x00;
 

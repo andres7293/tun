@@ -49,6 +49,10 @@ ICMP::RetCode ICMP::echo_request(ICMP_Header *icmph, Buffer ip_payload) {
 void ICMP::echo_reply(ICMP_Header *icmp, Buffer ip_payload) {
     icmp->type = ICMP::ECHO_REPLY_TYPE;
     icmp->code = ICMP::ECHO_REPLY_CODE;
+    this->checksum(icmp, ip_payload);
+}
+
+uint16_t ICMP::checksum(ICMP_Header *icmp, Buffer ip_payload) {
     icmp->checksum = 0;
-    icmp->checksum = utils::hostToNetShort(utils::checksum(ip_payload.data(), ip_payload.size(), 0));
+    return utils::checksum(ip_payload.data(), ip_payload.size(), 0);
 }
