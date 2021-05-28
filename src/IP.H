@@ -33,6 +33,21 @@ class IP_Header {
         static const int MIN_IP_HEADER_SIZE_BYTES = 20;
 }__attribute__((packed));
 
+class IPAddr {
+    public:
+        IPAddr(uint32_t addr): addr(addr) {
+            this->convertToString();
+        }
+        virtual string getStr() { return string(this->str); }
+
+        static const int MAX_STR_SIZE = 16;
+    private:
+        uint32_t addr;
+        char str[MAX_STR_SIZE];
+
+        void convertToString();
+};
+
 class IP {
     public:
 

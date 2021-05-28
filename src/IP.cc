@@ -77,6 +77,15 @@ uint16_t IP::generate_header_checksum(IP_Header *iph) {
     return utils::checksum(iph, sizeof(IP_Header), 0);
 }
 
+void IPAddr::convertToString() {
+    addr = utils::hostToNetLong(addr);
+    uint8_t *p = (uint8_t *) &addr;
+    snprintf(this->str,
+            this->MAX_STR_SIZE, 
+            "%i.%i.%i.%i",
+            p[3], p[2], p[1], p[0]
+            );
+}
 
 uint8_t IP_Header::getVersion() {
     return ((this->version_headerlen & 0xf0) >> 4);
