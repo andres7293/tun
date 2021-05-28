@@ -73,7 +73,8 @@ TEST_F(IP_Test, validateInvalidHeaderChecksum) {
 }
 
 TEST_F(IP_Test, testIPAddrToString) {
-    uint32_t addr = 0x0100007f;
-    IPAddr src_addr(addr);
-    ASSERT_EQ("127.0.0.1", string(src_addr.getStr()));
+    uint32_t net_addr = 0x7f000001;
+    IPAddr ipaddr(net_addr);
+    ASSERT_EQ("127.0.0.1", ipaddr.getStr());
+    ASSERT_EQ(net_addr, ipaddr.getAddr());
 }
