@@ -71,3 +71,9 @@ TEST_F(IP_Test, validateInvalidHeaderChecksum) {
     ASSERT_EQ(IP::RetCode::INVALID_HEADER_CHECKSUM,
             ip.validateHeaderChecksum(packet));
 }
+
+TEST_F(IP_Test, testIPAddrToString) {
+    uint32_t addr = 0x0100007f;
+    IPAddr src_addr(addr);
+    ASSERT_EQ("127.0.0.1", string(src_addr.getStr()));
+}
