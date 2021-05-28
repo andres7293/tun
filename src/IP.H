@@ -39,6 +39,7 @@ class IPAddr {
             this->convertToString();
         }
         virtual string getStr() { return string(this->str); }
+        uint32_t getAddr() { return this->addr; }
 
         static const int MAX_STR_SIZE = 16;
     private:

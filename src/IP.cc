@@ -78,7 +78,6 @@ uint16_t IP::generate_header_checksum(IP_Header *iph) {
 }
 
 void IPAddr::convertToString() {
-    addr = utils::hostToNetLong(addr);
     uint8_t *p = (uint8_t *) &addr;
     snprintf(this->str,
             this->MAX_STR_SIZE, 
