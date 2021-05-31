@@ -2,7 +2,7 @@
 #include "Utils.H"
 #include <iostream>
 
-UDP::RetCode UDP::input(Buffer ip_payload) {
+UDP::RetCode UDP::input(IP_Header *iph, Buffer ip_payload) {
     UDP::RetCode ret;
     ret = this->validatePacketSize(ip_payload);
     if (ret != UDP::RetCode::OK)

@@ -3,6 +3,7 @@
 
 #include "Buffer.H"
 #include "Utils.H"
+#include "IP.H"
 
 struct UDP_Header {
     uint16_t src_port;
@@ -20,7 +21,7 @@ class UDP {
             INVALID_CHECKSUM
         };
 
-        RetCode input(Buffer ip_payload);
+        RetCode input(IP_Header *iph, Buffer ip_payload);
     private:
         RetCode validatePacketSize(Buffer ip_payload);
         RetCode validateChecksum(Buffer ip_payload);
