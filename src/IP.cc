@@ -15,12 +15,10 @@ IP::RetCode IP::input(INetBuf& nbuf, uint16_t packetSize) {
     if (ret != IP::RetCode::OK)
         return ret;
     IP_Header *iph = (IP_Header *) packet.data();
-    switch(iph->protocol) {
-        case ICMPV4_PROTOCOL:
-            ICMP icmp {};
-            icmp.input(Buffer::createWithOffset(packet, sizeof(IP_Header)));
-            this->icmp_output(iph, packet);
-            break;
+    if (iph->protocol == ICMPV4_PROTOCOL) {
+        ICMP icmp {};
+        icmp.input(Buffer::createWithOffset(packet, sizeof(IP_Header)));
+        this->icmp_output(iph, packet);
     }
     return IP::RetCode::OK;
 }
