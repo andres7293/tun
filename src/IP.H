@@ -79,6 +79,7 @@ class IP {
 
         static const uint8_t IPV4_VERSION = 0x04;
         static const uint8_t ICMPV4_PROTOCOL = 0x01;
+        static const uint8_t UDPV4_PROTOCOL = 0x11;
     private:
         NetDev& netdev;
         IPAddr ipaddr;
