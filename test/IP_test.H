@@ -77,4 +77,5 @@ TEST_F(IP_Test, testIPAddrToString) {
     IPAddr ipaddr(net_addr);
     ASSERT_EQ("127.0.0.1", ipaddr.getStr());
     ASSERT_EQ(net_addr, ipaddr.getAddr());
+    ASSERT_EQ(true, ipaddr.isValid());
 }

@@ -37,14 +37,17 @@ class IPAddr {
     public:
         IPAddr(uint32_t addr): addr(addr) {
             this->convertToString();
+            this->_isValid = true;
         }
         virtual string getStr() { return string(this->str); }
         uint32_t getAddr() { return this->addr; }
+        bool isValid() { return this->_isValid; }
 
         static const int MAX_STR_SIZE = 16;
     private:
         uint32_t addr;
         char str[MAX_STR_SIZE];
+        bool _isValid;
 
         void convertToString();
 };
