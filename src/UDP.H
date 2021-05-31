@@ -13,11 +13,19 @@ struct UDP_Header {
 
 class UDP {
     public:
-        enum class RetCode {
+        enum class RetCode: int {
+            OK,
+            PACKET_SIZE_LESS_THAN_MIN_PACKET_SIZE,
+            EXPECTED_PACKET_SIZE_DOESNT_MATCH_WITH_RECEIVED_PACKET_SIZE,
+            INVALID_CHECKSUM
         };
 
         RetCode input(Buffer ip_payload);
     private:
+        RetCode validatePacketSize(Buffer ip_payload);
+        RetCode validateChecksum(Buffer ip_payload);
+
+        static const int MIN_PACKET_SIZE = sizeof(UDP_Header);
 };
 
 #endif
