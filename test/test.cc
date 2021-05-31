@@ -4,6 +4,7 @@
 #include "Packet_test.H"
 #include "IP_Header_test.H"
 #include "IP_test.H"
+#include "UDP_test.H"
 #include "ICMP_test.H"
 
 int main(int argc, char *argv[]) {
