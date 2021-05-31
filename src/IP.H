@@ -66,7 +66,7 @@ class IP {
             INVALID_HEADER_CHECKSUM
         };
 
-        IP(NetDev& netdev): netdev(netdev) {}
+        IP(NetDev& netdev, IPAddr ipaddr = IPAddr { 0 }): netdev(netdev), ipaddr(ipaddr) {}
         RetCode input(INetBuf& nbuf, uint16_t packetSize);
         RetCode icmp_output(IP_Header *iph, Buffer packet);
         RetCode validateInputSize(INetBuf& nbuf, uint16_t packetSize);
@@ -81,6 +81,7 @@ class IP {
         static const uint8_t ICMPV4_PROTOCOL = 0x01;
     private:
         NetDev& netdev;
+        IPAddr ipaddr;
 };
 
 ostream& operator << (ostream& os, IP_Header &h);
