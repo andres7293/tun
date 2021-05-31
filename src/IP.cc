@@ -15,9 +15,10 @@ IP::RetCode IP::input(INetBuf& nbuf, uint16_t packetSize) {
     if (ret != IP::RetCode::OK)
         return ret;
     IP_Header *iph = (IP_Header *) packet.data();
+    Buffer payload = Buffer::createWithOffset(packet, sizeof(IP_Header));
     if (iph->protocol == ICMPV4_PROTOCOL) {
         ICMP icmp {};
-        icmp.input(Buffer::createWithOffset(packet, sizeof(IP_Header)));
+        icmp.input(payload);
         this->icmp_output(iph, packet);
     }
     else if (iph->protocol == UDPV4_PROTOCOL) {
