@@ -19,7 +19,7 @@ Buffer::Buffer(Buffer& buffer, unsigned int sizeLimit) {
 }
 
 Buffer Buffer::createWithOffset(Buffer& buffer, unsigned int offsetInBytes) {
-    return Buffer(buffer.data(), buffer.size(), offsetInBytes);
+    return Buffer{buffer.data(), buffer.size(), offsetInBytes};
 }
 
 void* Buffer::data() {

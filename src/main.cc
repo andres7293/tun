@@ -17,13 +17,13 @@
 using namespace std;
 
 int main(void) {
-    TunIf tunif("tun0");
+    TunIf tunif{"tun0"};
     if (!tunif.alloc()) {
         cout << "Error opening /dev/tun, errno=" << tunif.getErrno() << endl;
         return -1;
     }
-    NetDev netdev(tunif);
-    IP ip(netdev);
+    NetDev netdev{tunif};
+    IP ip{netdev};
     system("ip link set tun0 up");
     system("ip addr add 10.0.0.1/24 dev tun0");
     NetBuf nbuf(1024);

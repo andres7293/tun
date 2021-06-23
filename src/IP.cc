@@ -4,7 +4,7 @@
 
 IP::RetCode IP::input(INetBuf& nbuf, uint16_t packetSize) {
     IP::RetCode ret;
-    Buffer packet(nbuf.data(), packetSize);
+    Buffer packet{nbuf.data(), packetSize};
     ret = this->validateInputSize(nbuf, packetSize);
     if (ret != IP::RetCode::OK)
         return ret;
