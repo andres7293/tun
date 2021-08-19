@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/IP.H"
+#include "IP.H"
 
 TEST(IP_Header, getVersion) {
     IP_Header iph;

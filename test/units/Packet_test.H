@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../src/Packet.H"
+#include "Packet.H"
 
 TEST(Packet, testPacketSize) {
     NetBuf nb(1024);

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "../src/ICMP.H"
 #include "data-test/Test_Frames.H"
+#include "ICMP.H"
 
 class ICMP_Test: public ::testing::Test {
     protected:

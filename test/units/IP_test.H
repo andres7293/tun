@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
-#include "../src/IP.H"
 #include "mocks/NetDevMock.H"
 #include "mocks/TunIfMock.H"
 #include "data-test/Test_Frames.H"
+
+#include "IP.H"
 
 class IP_Test: public ::testing::Test {
     protected:

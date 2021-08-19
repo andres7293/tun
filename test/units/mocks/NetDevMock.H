@@ -2,7 +2,7 @@
 #define __NETDEVMOCK_H__
 
 #include <stdint.h>
-#include "../../src/TunIf.H"
+#include "TunIf.H"
 
 class NetDevMock: public NetDev {
     public:

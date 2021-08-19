@@ -1,6 +1,6 @@
 #include <bits/stdint-uintn.h>
 #include <gtest/gtest.h>
-#include "../src/Buffer.H"
+#include "Buffer.H"
 
 TEST(Buffer, testvalidBuffer) {
     std::array<char, 20> arr { "Hello world" };

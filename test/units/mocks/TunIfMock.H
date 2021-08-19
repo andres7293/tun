@@ -1,7 +1,7 @@
 #ifndef __TUNIFMOCK_H__
 #define __TUNIFMOCK_H__
 
-#include "../../src/TunIf.H"
+#include "TunIf.H"
 
 class TunIfMock: public TunIf {
     public:
