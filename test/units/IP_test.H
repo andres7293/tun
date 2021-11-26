@@ -73,10 +73,17 @@ TEST_F(IP_Test, validateInvalidHeaderChecksum) {
             ip.validateHeaderChecksum(packet));
 }
 
-TEST_F(IP_Test, testIPAddrToString) {
-    uint32_t net_addr = 0x7f000001;
-    IPAddr ipaddr{net_addr};
-    ASSERT_EQ("127.0.0.1", ipaddr.getStr());
-    ASSERT_EQ(net_addr, ipaddr.getAddr());
-    ASSERT_EQ(true, ipaddr.isValid());
+TEST_F(IP_Test, IPAddr) {
+    IPAddr localhost { "127.0.0.1" };
+    IPAddr loopback { "127.0.0.0" };
+    IPAddr private_use { "10.0.0.0" };
+
+    ASSERT_EQ("127.0.0.1", localhost.toString());
+    ASSERT_EQ(0x7f000001, localhost.getAddress());
+
+    ASSERT_EQ("127.0.0.0", loopback.toString());
+    ASSERT_EQ(0x7f000000, loopback.getAddress());
+
+    ASSERT_EQ("10.0.0.0", private_use.toString());
+    ASSERT_EQ(0x0A000000, private_use.getAddress());
 }

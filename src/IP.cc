@@ -1,6 +1,7 @@
 #include "IP.H"
 #include "Utils.H"
 #include "ICMP.H"
+#include <cstdint>
 
 IP::RetCode IP::input(INetBuf& nbuf, uint16_t packetSize) {
     IP::RetCode ret;
@@ -78,15 +79,6 @@ uint16_t IP::generate_header_checksum(IP_Header *iph) {
     return utils::checksum(iph, sizeof(IP_Header), 0);
 }
 
-void IPAddr::convertToString() {
-    uint8_t *p = (uint8_t *) &addr;
-    snprintf(this->str,
-            this->MAX_STR_SIZE, 
-            "%i.%i.%i.%i",
-            p[3], p[2], p[1], p[0]
-            );
-}
-
 uint8_t IP_Header::getVersion() {
     return ((this->version_headerlen & 0xf0) >> 4);
 }
@@ -107,18 +99,68 @@ uint8_t IP_Header::getFragmentOffset() {
     return (this->flags_fragoffset & 0x1FFF);
 }
 
+IPAddr::IPAddr() {
+    memset((uint8_t *) this->addr, 0, sizeof(IPAddr::addr));
+}
+
+IPAddr::IPAddr(uint32_t addr) {
+    memcpy((uint8_t *) this->addr, (uint8_t *) &addr, sizeof(uint32_t));
+}
+
+IPAddr::IPAddr(string addr) {
+    char addr_str[4];
+    int i = 0;
+    int ip_index = 0;
+    for (const auto car: addr) {
+        if (car != '.') {
+            addr_str[i++] = car;
+        }
+        else {
+            addr_str[i] = '\0';
+            this->addr[ip_index++] = std::stoi(addr_str, nullptr, 10);
+            i = 0;
+        }
+    }
+    addr_str[i] = '\0';
+    this->addr[ip_index++] = std::stoi(addr_str, nullptr, 10);
+}
+
+string IPAddr::toString() {
+    char str_addr[16];
+    snprintf(str_addr,
+            16,
+            "%i.%i.%i.%i",
+            this->addr[0],
+            this->addr[1],
+            this->addr[2],
+            this->addr[3]
+            );
+    return string(str_addr);
+}
+
+/*
+ * Get the address in network byte order
+ */
+uint32_t IPAddr::getAddress() {
+    uint32_t* addr = (uint32_t *) this->addr;
+    #if ((__BYTE_ORDER__) == (__ORDER_LITTLE_ENDIAN__))
+        return utils::swap_endian_u32(*addr);
+    #endif
+    return *addr;
+}
+
 ostream& operator << (ostream& os, IP_Header &h) {
     os   << "IP_Header{"
-         << "version_headerlen=0x" << hex << (int) h.version_headerlen << dec
-         << ",tos=0x"              << hex << (int) h.tos               << dec
-         << ",total_len=0x"        << hex << (int) h.total_len         << dec
-         << ",id=0x"               << hex << (int) h.id                << dec
-         << ",flags_fragoffset=0x" << hex << (int) h.flags_fragoffset  << dec
-         << ",ttl=0x"              << hex << (int) h.ttl               << dec
-         << ",protocol=0x"         << hex << (int) h.protocol          << dec
-         << ",header_checksum=0x"  << hex << (int) h.header_checksum   << dec
-         << ",src_addr=0x"         << hex << (int) h.src_addr          << dec
-         << ",dst_addr=0x"         << hex << (int) h.dst_addr          << dec
+         << "version_headerlen=0x" << hex << (int) h.version_headerlen           << dec
+         << ",tos=0x"              << hex << (int) h.tos                         << dec
+         << ",total_len=0x"        << hex << (int) h.total_len                   << dec
+         << ",id=0x"               << hex << (int) h.id                          << dec
+         << ",flags_fragoffset=0x" << hex << (int) h.flags_fragoffset            << dec
+         << ",ttl=0x"              << hex << (int) h.ttl                         << dec
+         << ",protocol=0x"         << hex << (int) h.protocol                    << dec
+         << ",header_checksum=0x"  << hex << (int) h.header_checksum             << dec
+         << ",src_addr="         << IPAddr(h.src_addr).toString() << dec
+         << ",dst_addr="         << IPAddr(h.dst_addr).toString() << dec
          << "}";
     return os;
 }
