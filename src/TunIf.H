@@ -13,6 +13,7 @@ using namespace std;
 class TunIf: public NetworkInterface {
     public:
         TunIf(string tun_name);
+        ~TunIf() {}
         bool alloc();
         int dealloc();
         bool isAllocated();
@@ -20,8 +21,8 @@ class TunIf: public NetworkInterface {
         int getFd();
         string& getTunName();
 
-        ssize_t nread(uint8_t *buf, size_t len);
-        ssize_t nwrite(uint8_t *buf, size_t len);
+        virtual ssize_t nread(uint8_t *buf, size_t len);
+        virtual ssize_t nwrite(uint8_t *buf, size_t len);
     private:
         string tun_name;
         int fd;

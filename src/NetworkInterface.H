@@ -5,6 +5,7 @@
 
 class NetworkInterface {
     public:
+        virtual ~NetworkInterface() {}
         virtual ssize_t nread(uint8_t* buf, size_t len) = 0;
         virtual ssize_t nwrite(uint8_t* buf, size_t len) = 0;
 };
