@@ -77,6 +77,7 @@ TEST_F(IP_Test, IPAddr) {
     IPAddr localhost { "127.0.0.1" };
     IPAddr loopback { "127.0.0.0" };
     IPAddr private_use { "10.0.0.0" };
+    IPAddr local_network { "192.168.1.204" };
 
     ASSERT_EQ("127.0.0.1", localhost.toString());
     ASSERT_EQ(0x7f000001, localhost.getAddress());
@@ -86,4 +87,7 @@ TEST_F(IP_Test, IPAddr) {
 
     ASSERT_EQ("10.0.0.0", private_use.toString());
     ASSERT_EQ(0x0A000000, private_use.getAddress());
+
+    ASSERT_EQ("192.168.1.204", local_network.toString());
+    ASSERT_EQ(0xc0a801cc, local_network.getAddress());
 }
