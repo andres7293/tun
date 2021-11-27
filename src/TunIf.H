@@ -6,9 +6,11 @@
 #include <string>
 #include <iostream>
 
+#include "NetworkInterface.H"
+
 using namespace std;
 
-class TunIf {
+class TunIf: public NetworkInterface {
     public:
         TunIf(string tun_name);
         bool alloc();
@@ -18,8 +20,8 @@ class TunIf {
         int getFd();
         string& getTunName();
 
-        ssize_t tunread(uint8_t *buf, size_t len);
-        ssize_t tunwrite(uint8_t *buf, size_t len);
+        ssize_t nread(uint8_t *buf, size_t len);
+        ssize_t nwrite(uint8_t *buf, size_t len);
     private:
         string tun_name;
         int fd;

@@ -33,7 +33,7 @@ IP::RetCode IP::icmp_output(IP_Header *iph, Buffer packet) {
     iph->src_addr = dst;
     iph->dst_addr = src;
     iph->header_checksum = this->generate_header_checksum(iph);
-    this->netdev.write((uint8_t *) packet.data(), packet.size());
+    this->netdev.nwrite((uint8_t *) packet.data(), packet.size());
     return IP::RetCode::OK;
 }
 

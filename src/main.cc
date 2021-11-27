@@ -28,7 +28,7 @@ int main(void) {
     system("ip addr add 10.0.0.1/24 dev tun0");
     NetBuf nbuf(1024);
     while (1) {
-        size_t bytesRead = netdev.read(nbuf.data(), nbuf.size());
+        size_t bytesRead = netdev.nread(nbuf.data(), nbuf.size());
         ip.input(nbuf, bytesRead);
     }
     tunif.dealloc();
