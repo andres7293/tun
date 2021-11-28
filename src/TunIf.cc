@@ -47,7 +47,7 @@ string& TunIf::getTunName() {
     return this->tun_name;
 }
 
-ssize_t TunIf::tunread(uint8_t *buf, size_t len) {
+ssize_t TunIf::nread(uint8_t *buf, size_t len) {
     this->tv.tv_sec = 5;
     this->tv.tv_usec = 0;
     FD_ZERO(&this->readfds);
@@ -72,7 +72,7 @@ ssize_t TunIf::tunread(uint8_t *buf, size_t len) {
     }
 }
 
-ssize_t TunIf::tunwrite(uint8_t *buf, size_t len) {
+ssize_t TunIf::nwrite(uint8_t *buf, size_t len) {
     this->tv.tv_sec = 5;
     this->tv.tv_usec = 0;
     FD_ZERO(&this->readfds);

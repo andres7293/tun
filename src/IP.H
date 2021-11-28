@@ -35,21 +35,13 @@ class IP_Header {
 
 class IPAddr {
     public:
-        IPAddr(uint32_t addr): addr(addr) {
-            this->convertToString();
-            this->_isValid = true;
-        }
-        virtual string getStr() { return string(this->str); }
-        uint32_t getAddr() { return this->addr; }
-        bool isValid() { return this->_isValid; }
-
-        static const int MAX_STR_SIZE = 16;
+        IPAddr();
+        IPAddr(uint32_t addr);
+        IPAddr(string addr);
+        string toString();
+        uint32_t getAddress();
     private:
-        uint32_t addr;
-        char str[MAX_STR_SIZE];
-        bool _isValid;
-
-        void convertToString();
+        uint8_t addr[4];
 };
 
 class IP {
@@ -66,7 +58,7 @@ class IP {
             INVALID_HEADER_CHECKSUM
         };
 
-        IP(NetDev& netdev, IPAddr ipaddr = IPAddr { 0 }): netdev(netdev), ipaddr(ipaddr) {}
+        IP(NetDev& netdev): netdev(netdev) {};
         RetCode input(INetBuf& nbuf, uint16_t packetSize);
         RetCode icmp_output(IP_Header *iph, Buffer packet);
         RetCode validateInputSize(INetBuf& nbuf, uint16_t packetSize);
@@ -82,7 +74,6 @@ class IP {
         static const uint8_t UDPV4_PROTOCOL = 0x11;
     private:
         NetDev& netdev;
-        IPAddr ipaddr;
 };
 
 ostream& operator << (ostream& os, IP_Header &h);

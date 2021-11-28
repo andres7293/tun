@@ -4,16 +4,16 @@
 #include <stdint.h>
 #include <cstddef>
 
-#include "TunIf.H"
+#include "NetworkInterface.H"
 
 class NetDev {
     public:
-        NetDev(TunIf &tunif): tunif(tunif) {};
+        NetDev(NetworkInterface &net): net(net) {};
         virtual ~NetDev() {};
-        virtual size_t write(uint8_t *buf, uint16_t size);
-        virtual size_t read(uint8_t *buf, uint16_t size);
+        virtual size_t nread(uint8_t *buf, uint16_t size);
+        virtual size_t nwrite(uint8_t *buf, uint16_t size);
     private:
-        TunIf &tunif;
+        NetworkInterface &net;
 };
 
 #endif
