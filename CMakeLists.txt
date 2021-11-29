@@ -14,7 +14,6 @@ src/Buffer.cc
 src/NetBuf.cc
 src/NetDev.cc
 src/TunIf.cc
-src/Packet.cc
 src/Utils.cc)
 
 set(UTEST
