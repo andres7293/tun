@@ -31,8 +31,9 @@ unsigned int Buffer::size() {
 }
 
 bool Buffer::isNull() {
-    if (this->data() == nullptr)
+    if (this->data() == nullptr) {
         return true;
+    }
     return false;
 }
 
