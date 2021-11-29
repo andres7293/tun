@@ -7,6 +7,13 @@
 
 class Packet {
     public:
+        virtual uint8_t* header() = 0;
+        virtual unsigned int headerSize() = 0;
+
+        virtual uint8_t* payload() = 0;
+        virtual unsigned int payloadSize() = 0;
+
+        virtual uint16_t checksum() = 0;
 };
 
 #endif
