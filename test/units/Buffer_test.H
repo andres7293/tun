@@ -26,7 +26,7 @@ TEST(Buffer, testBufferOffset) {
 TEST(Buffer, testBufferOffsetGreaterThanBufferSize) {
     std::array<char, 20> arr { "Hello world" };
     Buffer buf{arr.data(), arr.size(), 50};
-    ASSERT_EQ(NULL, buf.data());
+    ASSERT_EQ(nullptr, buf.data());
     ASSERT_EQ(0, buf.size());
 }
 
@@ -42,7 +42,7 @@ TEST(Buffer, copyBufferWithCopiedBufferGreaterThanBufferSize) {
     std::array<char, 20> arr { "Hello world" };
     Buffer original{arr.data(), arr.size()};
     Buffer copy{original, 50};
-    ASSERT_EQ(NULL, copy.data());
+    ASSERT_EQ(nullptr, copy.data());
     ASSERT_EQ(0, copy.size());
 }
 
