@@ -51,6 +51,11 @@ TEST(Buffer, testNullBuffer) {
     Buffer buf{nullptr, arr.size()};
     ASSERT_EQ(true, buf.isNull());
     ASSERT_EQ(20, buf.size());
+
+    Buffer nullBuf {};
+    ASSERT_EQ(nullptr, nullBuf.data());
+    ASSERT_EQ(0, nullBuf.size());
+    ASSERT_EQ(true, nullBuf.isNull());
 }
 
 TEST(Buffer, testZeroSizeBuffer) {
