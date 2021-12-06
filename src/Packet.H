@@ -9,11 +9,13 @@ class Packet {
     public:
         Packet() {}
         Packet(Buffer packet): packet_{packet} {}
+        Packet(uint8_t* p, unsigned int size):
+            packet_{Buffer{p, size}} {}
         virtual ~Packet() {}
 
         uint8_t* data() { return static_cast<uint8_t*>(this->packet_.data()); }
-        Buffer get() { return this->packet_; }
         unsigned int size() { return this->packet_.size(); }
+        Buffer get() { return this->packet_; }
 
         void setNetworkLayerHeader(uint8_t* h, unsigned int len)
         {
