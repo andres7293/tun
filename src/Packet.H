@@ -12,6 +12,7 @@ class Packet {
         virtual ~Packet() {}
 
         uint8_t* data() { return static_cast<uint8_t*>(this->packet_.data()); }
+        Buffer get() { return this->packet_; }
         unsigned int size() { return this->packet_.size(); }
 
         void setNetworkLayerHeader(Buffer header) { this->networkLayerHeader_ = header; };
