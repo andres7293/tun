@@ -1,4 +1,5 @@
 #include "Buffer.H"
+#include <cstring>
 
 Buffer::Buffer(void* data, unsigned int sizeInBytes, unsigned int offsetInBytes) {
     if (offsetInBytes > sizeInBytes) {
@@ -18,7 +19,7 @@ Buffer::Buffer(Buffer& buffer, unsigned int sizeLimit) {
     this->_size = sizeLimit;
 }
 
-Buffer Buffer::createWithOffset(Buffer& buffer, unsigned int offsetInBytes) {
+Buffer Buffer::createWithOffset(Buffer buffer, unsigned int offsetInBytes) {
     return Buffer{buffer.data(), buffer.size(), offsetInBytes};
 }
 
@@ -40,4 +41,19 @@ bool Buffer::isNull() {
 void Buffer::cancelBuffer() {
     this->_data = nullptr;
     this->_size = 0;
+}
+
+bool Buffer::operator == (Buffer& b) {
+    if (this->size() != b.size()) {
+        return false;
+    }
+    if (0 != memcmp(
+                this->data(),
+                b.data(),
+                this->size()
+                )
+       ) {
+        return false;
+    }
+    return true;
 }
