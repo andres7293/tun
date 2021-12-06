@@ -15,11 +15,23 @@ class Packet {
         Buffer get() { return this->packet_; }
         unsigned int size() { return this->packet_.size(); }
 
-        void setNetworkLayerHeader(Buffer header) { this->networkLayerHeader_ = header; };
-        void setNetworkLayer(Buffer payload) { this->networkLayer_ = payload; };
+        void setNetworkLayerHeader(uint8_t* h, unsigned int len)
+        {
+            this->networkLayerHeader_ = Buffer{h, len};
+        }
+        void setNetworkLayer(uint8_t* p, unsigned int len)
+        {
+            this->networkLayer_ = Buffer{p, len};
+        }
 
-        void setTransportLayerHeader(Buffer header) { this->transportLayerHeader_ = header; };
-        void setTransportLayer(Buffer transport) { this->transportLayer_ = transport; };
+        void setTransportLayerHeader(uint8_t* h, unsigned int len)
+        {
+            this->transportLayerHeader_ = Buffer{h, len};
+        }
+        void setTransportLayer(uint8_t* p, unsigned int len)
+        {
+            this->transportLayer_ = Buffer{p, len};
+        }
     private:
         Buffer packet_;
 
