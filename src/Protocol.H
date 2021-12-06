@@ -12,9 +12,9 @@ class Protocol {
         virtual ~Protocol() {}
 
         /* input loop */
-        virtual int input(Packet packet) = 0;
+        virtual int input(Packet& packet) = 0;
         /* output loop */
-        virtual int output(Packet packet) = 0;
+        virtual int output(Packet& packet) = 0;
         /* get the size of protocol buffer size taking into account the protocol overhead*/
         virtual unsigned int getProtocolSize(unsigned int size) = 0; 
 };
