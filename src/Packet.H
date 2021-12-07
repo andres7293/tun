@@ -17,25 +17,14 @@ class Packet {
         unsigned int size() { return this->packet_.size(); }
         Buffer get() { return this->packet_; }
 
-        Buffer getNetworkLayerHeader() { return this->networkLayerHeader_; }
         Buffer getNetworkLayer() { return this->networkLayer_; }
-
-        Buffer getTransportLayerHeader() { return this->transportLayerHeader_; }
         Buffer getTransportLayer() { return this->transportLayer_; }
 
-        void setNetworkLayerHeader(uint8_t* h, unsigned int len)
-        {
-            this->networkLayerHeader_ = Buffer{h, len};
-        }
         void setNetworkLayer(uint8_t* p, unsigned int len)
         {
             this->networkLayer_ = Buffer{p, len};
         }
 
-        void setTransportLayerHeader(uint8_t* h, unsigned int len)
-        {
-            this->transportLayerHeader_ = Buffer{h, len};
-        }
         void setTransportLayer(uint8_t* p, unsigned int len)
         {
             this->transportLayer_ = Buffer{p, len};
@@ -43,10 +32,7 @@ class Packet {
     private:
         Buffer packet_;
 
-        Buffer networkLayerHeader_;
         Buffer networkLayer_;
-
-        Buffer transportLayerHeader_;
         Buffer transportLayer_;
 };
 
