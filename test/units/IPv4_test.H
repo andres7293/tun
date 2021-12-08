@@ -44,7 +44,7 @@ TEST_F(IPv4_Test, invalidIPVersion)
     IPv4Header iph;
     iph.version_headerlen = 0x65;
     const int SIZE = sizeof(IPv4Header) + 20;
-    const auto v = std::make_unique<uint8_t>(SIZE);
+    const auto v = std::make_unique<uint8_t[]>(SIZE);
     memcpy((uint8_t *) v.get(), (uint8_t *) &iph, sizeof(IPv4Header));
 
     Packet packet { v.get(), SIZE };
@@ -57,7 +57,7 @@ TEST_F(IPv4_Test, packetWithWrongHeaderLen)
     IPv4Header iph;
     iph.version_headerlen = 0x47;
     const int SIZE = sizeof(IPv4Header) + 20;
-    const auto v = std::make_unique<uint8_t>(SIZE);
+    const auto v = std::make_unique<uint8_t[]>(SIZE);
     memcpy((uint8_t *) v.get(), (uint8_t *) &iph, sizeof(IPv4Header));
 
     Packet packet { v.get(), SIZE };
