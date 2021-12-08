@@ -7,9 +7,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 include_directories(src test)
 
 set(SRC 
-src/IP.cc
-src/UDP.cc
-src/ICMP.cc
+src/IPv4.cc
+src/ICMPv4.cc
+src/Stack.cc
 src/Buffer.cc
 src/NetBuf.cc
 src/NetDev.cc
