@@ -42,4 +42,4 @@ jobs:
 
     - name: Test valgrind
       working-directory: ${{github.workspace}}/build
-      run: cd ${{github.workspace}}/build && valgrind --leak-check=full ./unit
+      run: cd ${{github.workspace}}/build && valgrind --erro-exitcode=1 --leak-check=full ./unit
