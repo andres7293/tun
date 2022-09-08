@@ -2,7 +2,7 @@
 
 BUILD_DIR="$(pwd)/build"
 
-if [ -d ${BUILD_DIR} ]; then
+if [ ! -d ${BUILD_DIR} ]; then
     mkdir -p ${BUILD_DIR}
 fi
 
